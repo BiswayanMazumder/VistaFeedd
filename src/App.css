@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+.webbody{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.jrnfmemf{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 50px;
+  gap: 10px;
+}
