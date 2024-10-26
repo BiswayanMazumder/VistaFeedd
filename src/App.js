@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import Landingpage from './Landing Page/landingpage';
 function App() {
+  // console.log('ENV',process.env.REACT_APP_FIREBASE_STORAGE_BUCKET);
   return (
     // <BrowserRouter>
     <BrowserRouter>
