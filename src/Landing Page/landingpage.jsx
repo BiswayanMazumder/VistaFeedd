@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -19,9 +19,20 @@ const analytics = getAnalytics(app);
 export default function Landingpage() {
   useEffect(() => {
     document.title = "VistaFeedd - Home";
-  })
+  });
+  const videolinks = [
+    'https://static.snapchat.com/videos/snapchat-dot-com/lens.mp4',
+    'https://static.snapchat.com/videos/snapchat-dot-com/find-your-friends.mp4',
+    'https://static.snapchat.com/videos/snapchat-dot-com/spotlight.mp4',
+    'https://static.snapchat.com/videos/snapchat-dot-com/map.mp4',
+    ''
+  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const handleVideoEnd = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % videolinks.length);
+  };
   return (
-    <div className='webbody'>
+    <div className='webbody' style={{overflow: 'hidden'}}>
       <div className="kefkdmvdm">
         <Link>
           <div className="logo">
@@ -53,10 +64,12 @@ export default function Landingpage() {
             </div>
           </div>
           <div className="njnkfmkedmfkm">
-          <br /><br />
-            <img src="https://static.snapchat.com/images/snapchatdotcom/Homepage+Bitmojis.png" alt="" height={'40px'} width={'200px'} />
-            <div className="jndkfdlv">
-              <video src="https://static.snapchat.com/videos/snapchat-dot-com/lens.mp4" autoPlay muted loop width={'100%'} height={'90%'} style={{ borderRadius: '20px' }}></video>
+            {/* <br /><br /> */}
+            <div className="mdnk">
+              <img src="https://static.snapchat.com/images/snapchatdotcom/Homepage+Bitmojis.png" alt="" height={'40px'} width={'200px'} />
+              <div className="jndkfdlv">
+                <video src={videolinks[currentIndex]} autoPlay muted width={'100%'} height={'90%'} style={{ borderRadius: '20px' }} onEnded={handleVideoEnd}></video>
+              </div>
             </div>
           </div>
         </div>
