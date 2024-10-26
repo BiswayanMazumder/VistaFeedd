@@ -43,13 +43,13 @@ export default function Landing_mobile() {
                     <img src="https://static.snapchat.com/images/snapchatdotcom/Homepage+Bitmojis.png" alt="" height={'50px'} width={'220px'} />
                 </div>
                 <div className="jrhvjnjv" style={{ marginBottom: '50px', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: "fit-content", width: "fit-content" }}>
-                    <video src="https://static.snapchat.com/videos/snapchat-dot-com/lens.mp4" height={'100%'} width={'100%'} style={{ borderRadius: '20px' }} autoPlay muted loop></video>
+                    <video src="https://videos.ctfassets.net/inb32lme5009/3blBBSbEfm9vVY4EvqWrcV/611d691c67340e76cb471491c792a988/Section_2JavyCoffee.mp4" height={'100%'} width={'100%'} style={{ borderRadius: '20px' }} autoPlay muted loop></video>
                 </div>
                 <div className="jrhvjnjv" style={{ marginBottom: '50px', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: "fit-content", width: "fit-content" }}>
-                    <video src="https://static.snapchat.com/videos/snapchat-dot-com/find-your-friends.mp4" height={'100%'} width={'100%'} style={{ borderRadius: '20px' }} autoPlay muted loop></video>
+                    <video src="https://videos.ctfassets.net/inb32lme5009/34ca6VPJhXCkcpJfPYyQL/29709124985abb089d1042d51157edc5/Section_3YoungLA.mp4" height={'100%'} width={'100%'} style={{ borderRadius: '20px' }} autoPlay muted loop></video>
                 </div>
                 <div className="jrhvjnjv" style={{ marginBottom: '50px', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: "fit-content", width: "fit-content" }}>
-                    <video src="https://static.snapchat.com/videos/snapchat-dot-com/spotlight.mp4" height={'100%'} width={'100%'} style={{ borderRadius: '20px' }} autoPlay muted loop></video>
+                    <video src="https://videos.ctfassets.net/inb32lme5009/2Xi6NUEtv8wTyfVbYZFV8b/c0ba37fc46e3aa87182231b9fe43c816/Section_2TalkSpace.mp4" height={'100%'} width={'100%'} style={{ borderRadius: '20px' }} autoPlay muted loop></video>
                 </div>
                 <div className="jrhvjnjv" style={{ marginBottom: '20px', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: "fit-content", width: "fit-content" }}>
                     <video src="https://static.snapchat.com/videos/snapchat-dot-com/map.mp4" height={'100%'} width={'100%'} style={{ borderRadius: '20px' }} autoPlay muted loop></video>

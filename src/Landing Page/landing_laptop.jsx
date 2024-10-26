@@ -7,6 +7,9 @@ export default function Landing_laptop() {
     'https://static.snapchat.com/videos/snapchat-dot-com/find-your-friends.mp4',
     'https://static.snapchat.com/videos/snapchat-dot-com/spotlight.mp4',
     'https://static.snapchat.com/videos/snapchat-dot-com/map.mp4',
+    'https://videos.ctfassets.net/inb32lme5009/2Xi6NUEtv8wTyfVbYZFV8b/c0ba37fc46e3aa87182231b9fe43c816/Section_2TalkSpace.mp4',
+    'https://videos.ctfassets.net/inb32lme5009/34ca6VPJhXCkcpJfPYyQL/29709124985abb089d1042d51157edc5/Section_3YoungLA.mp4',
+    'https://videos.ctfassets.net/inb32lme5009/3blBBSbEfm9vVY4EvqWrcV/611d691c67340e76cb471491c792a988/Section_2JavyCoffee.mp4'
 
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
