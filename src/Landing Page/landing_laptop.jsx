@@ -2,19 +2,20 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 
 export default function Landing_laptop() {
-    const videolinks = [
-        'https://static.snapchat.com/videos/snapchat-dot-com/lens.mp4',
-        'https://static.snapchat.com/videos/snapchat-dot-com/find-your-friends.mp4',
-        'https://static.snapchat.com/videos/snapchat-dot-com/spotlight.mp4',
-        'https://static.snapchat.com/videos/snapchat-dot-com/map.mp4',
-        
-      ];
-      const [currentIndex, setCurrentIndex] = useState(0);
-      const handleVideoEnd = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % videolinks.length);
-      };
+  const videolinks = [
+    'https://static.snapchat.com/videos/snapchat-dot-com/lens.mp4',
+    'https://static.snapchat.com/videos/snapchat-dot-com/find-your-friends.mp4',
+    'https://static.snapchat.com/videos/snapchat-dot-com/spotlight.mp4',
+    'https://static.snapchat.com/videos/snapchat-dot-com/map.mp4',
+
+  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const handleVideoEnd = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % videolinks.length);
+  };
+  const [issignup, setsignup] = useState(false);
   return (
-    <div className='webbody' style={{overflow: 'hidden'}}>
+    <div className='webbody' style={{ overflow: 'hidden' }}>
       <div className="kefkdmvdm">
         <Link>
           <div className="logo">
@@ -25,13 +26,17 @@ export default function Landing_laptop() {
           <div className="loginoptions">
             <div className="ehfjenfedn">
               <div className="fjnvkfnv" style={{ fontWeight: '600', fontSize: '22px' }}>
-                Log in to VistaFeedd
+                {issignup ? 'Sign up to VistaFeedd' : "Log in to VistaFeedd"}
               </div>
               <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '18px' }}>
                 Chat, Snap and video call your friends. Watch Stories and <br /> Spotlight, all from your computer.
               </div>
+              {issignup ? <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '18px', marginTop: '20px', display: 'flex', flexDirection: 'column' }}>
+                {issignup ? 'Username' : 'Username or email address'}
+                <input type="text" style={{ marginTop: '10px' }} className='jefjnjfjkj' />
+              </div> : <></>}
               <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '18px', marginTop: '20px', display: 'flex', flexDirection: 'column' }}>
-                Username or email address
+                {issignup ? 'Email Address' : 'Username or email address'}
                 <input type="text" style={{ marginTop: '10px' }} className='jefjnjfjkj' />
               </div>
               <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '18px', marginTop: '20px', display: 'flex', flexDirection: 'column' }}>
@@ -40,9 +45,15 @@ export default function Landing_laptop() {
               </div>
               <Link style={{ textDecoration: 'none' }}>
                 <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '15px', marginTop: '35px', display: 'flex', flexDirection: 'column', backgroundColor: '#00A3E0', height: '40px', width: '100%', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>
-                  Log in
+                  {issignup ? 'Sign up' : 'Log in'}
                 </div>
               </Link>
+              <div className="jrnjrnv" style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: '10px' }}>
+                {issignup ? 'Already have an account' : "Don't have an account"}
+                <Link style={{ textDecoration: 'none', fontWeight: '600', fontSize: '15px' }} onClick={() => setsignup(!issignup)}>
+                  {issignup ? 'Log in' : "Sign up"}
+                </Link>
+              </div>
             </div>
           </div>
           <div className="njnkfmkedmfkm">
