@@ -7,7 +7,7 @@ export default function Landing_laptop() {
         'https://static.snapchat.com/videos/snapchat-dot-com/find-your-friends.mp4',
         'https://static.snapchat.com/videos/snapchat-dot-com/spotlight.mp4',
         'https://static.snapchat.com/videos/snapchat-dot-com/map.mp4',
-        ''
+        
       ];
       const [currentIndex, setCurrentIndex] = useState(0);
       const handleVideoEnd = () => {
