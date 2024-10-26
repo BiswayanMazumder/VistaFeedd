@@ -46,14 +46,18 @@ export default function Landingpage() {
                 <input type="password" style={{ marginTop: '10px' }} className='jefjnjfjkj' />
               </div>
               <Link style={{ textDecoration: 'none' }}>
-              <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '15px', marginTop: '35px', display: 'flex', flexDirection: 'column',backgroundColor: '#00A3E0',height: '40px',width: '100%',borderRadius: '20px',display: 'flex',justifyContent: 'center',alignItems: 'center',color: 'white' }}>
-              Log in
-              </div>
+                <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '15px', marginTop: '35px', display: 'flex', flexDirection: 'column', backgroundColor: '#00A3E0', height: '40px', width: '100%', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>
+                  Log in
+                </div>
               </Link>
             </div>
           </div>
           <div className="njnkfmkedmfkm">
-
+          <br /><br />
+            <img src="https://static.snapchat.com/images/snapchatdotcom/Homepage+Bitmojis.png" alt="" height={'40px'} width={'200px'} />
+            <div className="jndkfdlv">
+              <video src="https://static.snapchat.com/videos/snapchat-dot-com/lens.mp4" autoPlay muted loop width={'100%'} height={'90%'} style={{ borderRadius: '20px' }}></video>
+            </div>
           </div>
         </div>
       </div>

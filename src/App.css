@@ -130,4 +130,16 @@
 .jefjnjfjkj:focus {
   border: none; /* Removes border when focused and typing */
 }
+.jndkfdlv{
+  height: 90%;
+  /* background-color: #000; */
+  width: fit-content;
+  /* margin-top: 20px; */
+  border-radius: 20px;
+}
+@media  screen and (max-width: 1023px) {
+  .kefkdmvdm{
+    display: none;
+  }
+}
 
