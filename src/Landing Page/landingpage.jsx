@@ -4,6 +4,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { Link, useParams } from 'react-router-dom';
 import Landing_laptop from './landing_laptop';
+import Landing_mobile from './landing_mobile';
 const firebaseConfig = {
   apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
   authDomain: "vistafeedd.firebaseapp.com",
@@ -36,6 +37,9 @@ export default function Landingpage() {
     <div className="webbody">
       <div className="jhghgj">
       <Landing_laptop/>
+      </div>
+      <div className="ekfjjf">
+        <Landing_mobile/>
       </div>
     </div>
   )
