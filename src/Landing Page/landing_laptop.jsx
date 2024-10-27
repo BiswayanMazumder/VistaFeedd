@@ -1,6 +1,25 @@
+import { getAnalytics } from 'firebase/analytics';
+import { initializeApp } from 'firebase/app';
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, getDoc, serverTimestamp, setDoc, arrayUnion } from "firebase/firestore";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
+  authDomain: "vistafeedd.firebaseapp.com",
+  projectId: "vistafeedd",
+  storageBucket: "vistafeedd.appspot.com",
+  messagingSenderId: "1025680611513",
+  appId: "1:1025680611513:web:40aeb5d0434d67ca1ea368",
+  measurementId: "G-9V0M9VQDGM"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
 export default function Landing_laptop() {
   const videolinks = [
     'https://static.snapchat.com/videos/snapchat-dot-com/lens.mp4',
@@ -16,7 +35,63 @@ export default function Landing_laptop() {
   const handleVideoEnd = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % videolinks.length);
   };
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
+  const [username, setusername] = useState('');
   const [issignup, setsignup] = useState(false);
+  const [error, seterror] = useState('');
+  const loginuser = async () => {
+    console.log('Login clicked')
+  }
+  const signupuser = async () => {
+    try {
+      // Check if the username already exists
+      const usernameDoc = await getDoc(doc(db, 'User Names', 'usernames'));
+      const existingUsernames = usernameDoc.exists() ? usernameDoc.data().usernames : [];
+
+      if (existingUsernames.includes(username)) {
+        console.error('Username already exists. Please choose a different username.');
+        seterror('Username already exists. Please choose a different username.');
+        // Handle the error (e.g., show a message to the user)
+        return;
+      }
+
+      // Create user
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log(user);
+
+      // Prepare data to update
+      const docRef = doc(db, 'User Details', user.uid);
+      const dataToUpdate = {
+        Name: username,
+        UserId: user.uid,
+        Password: password, // Consider storing hashed passwords instead of plain text
+        Email: email,
+        DoJ: serverTimestamp(),
+        'Profile Pic': 'https://archive.org/download/instagram-plain-round/instagram%20dip%20in%20hair.jpg',
+      };
+
+      // Set document in Firestore
+      await setDoc(docRef, dataToUpdate);
+
+      const usernameAddDoc = doc(db, 'User Names', 'usernames');
+      const usernameUpdates = {
+        usernames: arrayUnion(username)
+      };
+      await setDoc(usernameAddDoc, usernameUpdates, { merge: true });
+
+      setsignup(false);
+      // Additional success handling can go here
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error('Error during signup:', errorCode, errorMessage);
+      seterror('Email address already exists. Please choose a different email address.');
+      // Handle error (e.g., show a message to the user)
+    }
+  };
+
   return (
     <div className='webbody' style={{ overflow: 'hidden' }}>
       <div className="kefkdmvdm">
@@ -36,21 +111,26 @@ export default function Landing_laptop() {
               </div>
               {issignup ? <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '18px', marginTop: '20px', display: 'flex', flexDirection: 'column' }}>
                 {issignup ? 'Username' : 'Username or email address'}
-                <input type="text" style={{ marginTop: '10px' }} className='jefjnjfjkj' />
+                <input type="text" style={{ marginTop: '10px' }} className='jefjnjfjkj' value={username} onChange={(e) => setusername(e.target.value)} />
               </div> : <></>}
               <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '18px', marginTop: '20px', display: 'flex', flexDirection: 'column' }}>
                 {issignup ? 'Email Address' : 'Username or email address'}
-                <input type="text" style={{ marginTop: '10px' }} className='jefjnjfjkj' />
+                <input type="text" style={{ marginTop: '10px' }} className='jefjnjfjkj' value={email} onChange={(e) => setemail(e.target.value)} />
               </div>
               <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '18px', marginTop: '20px', display: 'flex', flexDirection: 'column' }}>
                 Password
-                <input type="password" style={{ marginTop: '10px' }} className='jefjnjfjkj' />
+                <input type="password" style={{ marginTop: '10px' }} className='jefjnjfjkj' value={password} onChange={(e) => setpassword(e.target.value)} />
               </div>
               <Link style={{ textDecoration: 'none' }}>
-                <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '15px', marginTop: '35px', display: 'flex', flexDirection: 'column', backgroundColor: '#00A3E0', height: '40px', width: '100%', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>
+                <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '15px', marginTop: '35px', display: 'flex', flexDirection: 'column', backgroundColor: '#00A3E0', height: '40px', width: '100%', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }} onClick={issignup ? signupuser : loginuser}>
                   {issignup ? 'Sign up' : 'Log in'}
                 </div>
               </Link>
+              {
+                issignup ? <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '15px', marginTop: '20px', display: 'flex', flexDirection: 'column', color: 'red',display: 'flex',alignItems: 'center',textAlign: 'center' ,justifyContent: 'center'}}>
+                  {error}
+                </div> : <></>
+              }
               <div className="jrnjrnv" style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: '10px' }}>
                 {issignup ? 'Already have an account' : "Don't have an account"}
                 <Link style={{ textDecoration: 'none', fontWeight: '600', fontSize: '15px' }} onClick={() => setsignup(!issignup)}>
