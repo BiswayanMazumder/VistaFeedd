@@ -5,6 +5,7 @@ import {
   Route
 } from 'react-router-dom';
 import Landingpage from './Landing Page/landingpage';
+import Homepage from './Home Page/homepage';
 function App() {
   // console.log('ENV',process.env.REACT_APP_FIREBASE_STORAGE_BUCKET);
   return (
@@ -12,6 +13,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landingpage />} />
+      </Routes>
+      <Routes>
+        <Route path="/home" element={<Homepage />} />
       </Routes>
     </BrowserRouter>
   );

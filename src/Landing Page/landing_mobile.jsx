@@ -2,7 +2,7 @@ import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, getDoc, serverTimestamp, setDoc, arrayUnion } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -26,10 +26,19 @@ export default function Landing_mobile() {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
     const [username, setusername] = useState('');
-    const loginuser = async () => {
-        console.log('Login clicked')
-    }
     const [error, seterror] = useState('');
+    const loginuser = async () => {
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            console.log('Welcome', user.email); // Log the user's email or any other property
+            window.location.replace('/home');
+        } catch (error) {
+            console.error('Login error:', error.code, error.message);
+            seterror('Please enter correct email or password');
+        }
+    };
+    
 
     const signupuser = async () => {
         try {
@@ -101,11 +110,10 @@ export default function Landing_mobile() {
                     Password
                     <input type="password" style={{ marginTop: '10px', width: '200px' }} className='jefjnjfjkj' width={'200px'} value={password} onChange={(e) => setpassword(e.target.value)} />
                 </div>
-                {
-                    issignup ? <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '15px', marginTop: '20px', display: 'flex', flexDirection: 'column', color: 'red' }}>
+                <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '15px', marginTop: '20px', display: 'flex', flexDirection: 'column', color: 'red' }}>
                         {error}
-                    </div> : <></>
-                }
+                    </div> 
+                
                 <Link style={{ textDecoration: 'none' }}>
                     <div className="ejfdmn" style={{ fontWeight: '500', fontSize: '15px', marginTop: '35px', display: 'flex', flexDirection: 'column', backgroundColor: '#00A3E0', height: '40px', width: '200px', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}
                         onClick={issignup ? signupuser : loginuser}>

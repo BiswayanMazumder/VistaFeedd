@@ -2,7 +2,7 @@ import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, getDoc, serverTimestamp, setDoc, arrayUnion } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -41,8 +41,16 @@ export default function Landing_laptop() {
   const [issignup, setsignup] = useState(false);
   const [error, seterror] = useState('');
   const loginuser = async () => {
-    console.log('Login clicked')
-  }
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        console.log('Welcome', user.email); // Log the user's email or any other property
+        window.location.replace('/home');
+    } catch (error) {
+        // console.error('Login error:', error.code, error.message);
+        seterror('Please enter correct email or password');
+    }
+};
   const signupuser = async () => {
     try {
       // Check if the username already exists
