@@ -6,6 +6,7 @@ import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getFirestore } from '@firebase/firestore';
 import Sidebar_Explore from '../Components/sidebar_explore';
+import Sidebar_Explore_mobile from '../Components_mobile/sidebar_explore_mobile';
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
     authDomain: "vistafeedd.firebaseapp.com",
@@ -43,7 +44,12 @@ export default function ExplorePage() {
     })
     return (
         <div className='webbody' style={{ backgroundColor: 'black', display: 'flex', flexDirection: 'row' }}>
-            <Sidebar_Explore/>
+        <div className="jjndv">
+          <Sidebar_Explore />
+        </div>
+        <div className="jnfvnkf" style={{ color: "white" }}>
+          <Sidebar_Explore_mobile />
+        </div>
         </div>
     )
 }

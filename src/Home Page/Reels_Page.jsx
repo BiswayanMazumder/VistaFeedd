@@ -8,6 +8,7 @@ import { getFirestore } from '@firebase/firestore';
 import Sidebar_Explore from '../Components/sidebar_explore';
 import Sidebar_Search from '../Components/sidebar_search';
 import Sidebar_Reels from '../Components/Sidebar_reels';
+import Sidebar_reels_mobile from '../Components_mobile/Sidebar_reels_mobile';
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
     authDomain: "vistafeedd.firebaseapp.com",
@@ -45,7 +46,12 @@ export default function Reels_Page() {
     })
     return (
         <div className='webbody' style={{ backgroundColor: 'black', display: 'flex', flexDirection: 'row' }}>
-            <Sidebar_Reels/>
+           <div className="jjndv">
+          <Sidebar_Reels />
+        </div>
+        <div className="jnfvnkf" style={{ color: "white" }}>
+          <Sidebar_reels_mobile />
+        </div>
         </div>
     )
 }

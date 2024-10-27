@@ -220,9 +220,32 @@
 .bvjnv{
   margin-top: 7px;
 }
+.jnfvnkf{
+  display: none;
+}
+.jjnd{
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+}
 @media  screen and (max-width: 1023px) {
-  .jrnvfnvkfmv{
+  .jjndv{
     display: none;
+  }
+  .jnfvnkf{
+    display:flex;
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    /* background-color: white; */
+    flex-direction: row;
+    gap: 10px;
+    justify-content: start;
+    align-items: center;
+    margin-left: 30px;
   }
   
 }

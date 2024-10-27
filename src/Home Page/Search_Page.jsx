@@ -7,6 +7,7 @@ import { getAnalytics } from 'firebase/analytics';
 import { getFirestore } from '@firebase/firestore';
 import Sidebar_Explore from '../Components/sidebar_explore';
 import Sidebar_Search from '../Components/sidebar_search';
+import Sidebar_search_mobile from '../Components_mobile/sidebar_search_mobile';
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
     authDomain: "vistafeedd.firebaseapp.com",
@@ -44,7 +45,12 @@ export default function Search_Page() {
     })
     return (
         <div className='webbody' style={{ backgroundColor: 'black', display: 'flex', flexDirection: 'row' }}>
-            <Sidebar_Search/>
+             <div className="jjndv">
+        <Sidebar_Search />
+      </div>
+      <div className="jnfvnkf" style={{color:"white"}}>
+        <Sidebar_search_mobile/>
+      </div>
         </div>
     )
 }
