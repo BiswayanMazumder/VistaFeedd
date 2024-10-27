@@ -1,8 +1,8 @@
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc, serverTimestamp, setDoc, arrayUnion } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -40,6 +40,21 @@ export default function Landing_laptop() {
   const [username, setusername] = useState('');
   const [issignup, setsignup] = useState(false);
   const [error, seterror] = useState('');
+  useEffect(() => {
+    const checkloggedin = async () => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          window.location.replace('/home');
+          const uid = user.uid;
+          // ...
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
+    }
+    checkloggedin();
+  })
   const loginuser = async () => {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
