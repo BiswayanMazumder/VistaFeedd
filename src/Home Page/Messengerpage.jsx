@@ -7,6 +7,7 @@ import { getAnalytics } from 'firebase/analytics';
 import { getFirestore } from '@firebase/firestore';
 import Sidebar_Explore from '../Components/sidebar_explore';
 import Sidebar_Messages from '../Components/Sidebar_Messages';
+import Sidebar_messages_mobile from '../Components_mobile/Sidebar_messages_mobile';
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
     authDomain: "vistafeedd.firebaseapp.com",
@@ -44,7 +45,12 @@ export default function MessengerPage() {
     })
     return (
         <div className='webbody' style={{ backgroundColor: 'black', display: 'flex', flexDirection: 'row' }}>
-            <Sidebar_Messages/>
+            <div className="jjndv">
+          <Sidebar_Messages />
+        </div>
+        <div className="jnfvnkf" style={{ color: "white" }}>
+          <Sidebar_messages_mobile />
+        </div>
         </div>
     )
 }
