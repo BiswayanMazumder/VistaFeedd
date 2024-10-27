@@ -208,3 +208,15 @@
   margin-left: 30px;
   margin-top: 20px;
 }
+.dnvdnvd{
+  display: flex;
+  flex-direction: row;
+  margin-top: 50px;
+  margin-left: 30px;
+  color: white;
+  font-weight: bolder;
+  gap: 10px;
+}
+.bvjnv{
+  margin-top: 7px;
+}

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import Sidebar from '../Components/sidebar'
 import Sidebar_Home from '../Components/sidebar'
 
 export default function Homepage() {
