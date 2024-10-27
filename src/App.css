@@ -226,9 +226,10 @@
 .jjnd{
   display: flex;
   flex-direction: row;
-  gap: 40px;
+  /* gap: 40px; */
   align-items: center;
-  justify-content: center;
+  width: 100vw;
+  justify-content: space-evenly;
 }
 @media  screen and (max-width: 1023px) {
   .jjndv{
@@ -242,10 +243,10 @@
     width: 100%;
     /* background-color: white; */
     flex-direction: row;
-    gap: 10px;
-    justify-content: start;
+    /* gap: 10px; */
+    justify-content: space-evenly;
     align-items: center;
-    margin-left: 30px;
+    /* margin-left: 30px; */
   }
   
 }
