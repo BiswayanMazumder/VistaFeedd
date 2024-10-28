@@ -252,6 +252,7 @@
 }
 .krkmfkfvm{
   position: absolute;
+  width: 77%;
   /* width: 80vw; */
   height: 200px;
   /* background-color: white; */
@@ -259,8 +260,10 @@
   margin-left: 50px;
   display: flex;
   flex-direction: row;
-  gap: 30px;
+  gap: 50px;
   color: white;
+  justify-content: center;
+  align-items: center;
 }
 .krmfvm{
   height: 100px;
@@ -271,3 +274,15 @@
   align-items: center;
   text-align: center;
 }
+.jkdnfkd{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: fit-content;
+  gap: 30px;
+  margin-top: 20px;
+}
+@media  screen and (max-width: 1023px) {
+  .jdnvnmvnd{
+    display: none;
+  }}

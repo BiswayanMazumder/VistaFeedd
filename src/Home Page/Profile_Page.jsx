@@ -7,6 +7,7 @@ import { getAnalytics } from 'firebase/analytics';
 import { doc, getDoc, getFirestore } from '@firebase/firestore';
 import Sidebar_home_mobile from '../Components_mobile/sidebar_home_mobile';
 import Sidebar_Profile from '../Components/Sidebar_Profile';
+import Profilepage_laptop from './Sidebar Pages(Laptop)/profilepage_laptop';
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
     authDomain: "vistafeedd.firebaseapp.com",
@@ -57,21 +58,12 @@ export default function Profile_Page() {
         fetchdp();
     }, [])
     return (
-        <div className='webbody' style={{ backgroundColor: 'black', display: 'flex', flexDirection: 'row' }}>
+        <div className='webbody' style={{ backgroundColor: 'black', display: 'flex', flexDirection: 'row'}}>
             <div className="jjndv">
                 <Sidebar_Profile />
             </div>
-            <div className="jdnvnmvnd" style={{ color: "white" }}>
-                <div className="krkmfkfvm">
-                    <div className="ehfjdv">
-                        <div className="nkvmvdl" style={{ height: '100px', width: "100px", borderRadius: "50%", backgroundColor: "white" }}>
-                            <img src={profilepicture} alt="" height={"100px"} width={"100px"} style={{ borderRadius: "50%" }} />
-                        </div>
-                    </div>
-                    <div className="krmfvm">
-                        {name}
-                    </div>
-                </div>
+            <div className="jnnf">
+                <Profilepage_laptop/>
             </div>
         </div>
     )
