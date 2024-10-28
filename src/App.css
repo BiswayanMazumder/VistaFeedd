@@ -250,3 +250,24 @@
   }
   
 }
+.krkmfkfvm{
+  position: absolute;
+  /* width: 80vw; */
+  height: 200px;
+  /* background-color: white; */
+  margin-top: 50px;
+  margin-left: 50px;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  color: white;
+}
+.krmfvm{
+  height: 100px;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Sidebar_Home from '../Components/sidebar'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { getFirestore } from '@firebase/firestore';
+import { doc, getDoc, getFirestore } from '@firebase/firestore';
 import Sidebar_home_mobile from '../Components_mobile/sidebar_home_mobile';
 import Sidebar_Profile from '../Components/Sidebar_Profile';
 const firebaseConfig = {
-  apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
-  authDomain: "vistafeedd.firebaseapp.com",
-  projectId: "vistafeedd",
-  storageBucket: "vistafeedd.appspot.com",
-  messagingSenderId: "1025680611513",
-  appId: "1:1025680611513:web:40aeb5d0434d67ca1ea368",
-  measurementId: "G-9V0M9VQDGM"
+    apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
+    authDomain: "vistafeedd.firebaseapp.com",
+    projectId: "vistafeedd",
+    storageBucket: "vistafeedd.appspot.com",
+    messagingSenderId: "1025680611513",
+    appId: "1:1025680611513:web:40aeb5d0434d67ca1ea368",
+    measurementId: "G-9V0M9VQDGM"
 };
 
 // Initialize Firebase
@@ -23,30 +23,56 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 export default function Profile_Page() {
-  useEffect(() => {
-    const checkloggedin = async () => {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          //   window.location.replace('/home');
-          const uid = user.uid;
-          // ...
-        } else {
-          // User is signed out
-          window.location.replace('/');
-          // ...
+    useEffect(() => {
+        const checkloggedin = async () => {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    //   window.location.replace('/home');
+                    const uid = user.uid;
+                    // ...
+                } else {
+                    // User is signed out
+                    window.location.replace('/');
+                    // ...
+                }
+            });
         }
-      });
-    }
-    checkloggedin();
-  })
-  useEffect(() => {
-    document.title = "VistaFeedd"
-  })
-  return (
-    <div className='webbody' style={{ backgroundColor: 'black', display: 'flex', flexDirection: 'row' }}>
-      <div className="jjndv">
-        <Sidebar_Profile />
-      </div>
-    </div>
-  )
+        checkloggedin();
+    })
+    useEffect(() => {
+        document.title = "VistaFeedd"
+    })
+    const [profilepicture, setprofilepicture] = useState('');
+    const [name, setname] = useState('');
+    useEffect(() => {
+        const fetchdp = async () => {
+            const Uid = auth.currentUser.uid;
+            const docRef = doc(db, "User Details", Uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                setprofilepicture(docSnap.data()['Profile Pic']);
+                setname(docSnap.data()['Name']);
+            }
+        }
+        fetchdp();
+    }, [])
+    return (
+        <div className='webbody' style={{ backgroundColor: 'black', display: 'flex', flexDirection: 'row' }}>
+            <div className="jjndv">
+                <Sidebar_Profile />
+            </div>
+            <div className="jdnvnmvnd" style={{ color: "white" }}>
+                <div className="krkmfkfvm">
+                    <div className="ehfjdv">
+                        <div className="nkvmvdl" style={{ height: '100px', width: "100px", borderRadius: "50%", backgroundColor: "white" }}>
+                            <img src={profilepicture} alt="" height={"100px"} width={"100px"} style={{ borderRadius: "50%" }} />
+                        </div>
+                    </div>
+                    <div className="krmfvm">
+                        {name}
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }
