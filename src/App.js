@@ -11,6 +11,7 @@ import ExplorePage from './Home Page/Explorepage';
 import Reels_Page from './Home Page/Reels_Page';
 import MessengerPage from './Home Page/Messengerpage';
 import NotificationPage from './Home Page/Notifiactionpage';
+import Profile_Page from './Home Page/Profile_Page';
 function App() {
   // console.log('ENV',process.env.REACT_APP_FIREBASE_STORAGE_BUCKET);
   return (
@@ -36,6 +37,9 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/notifications" element={<NotificationPage />} />
+      </Routes>
+      <Routes>
+        <Route path="/profile" element={<Profile_Page />} />
       </Routes>
     </BrowserRouter>
   );
