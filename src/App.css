@@ -282,7 +282,14 @@
   gap: 30px;
   margin-top: 20px;
 }
+.jnnfe{
+  display: none;
+}
 @media  screen and (max-width: 1023px) {
   .jdnvnmvnd{
     display: none;
-  }}
+  }
+  .jnnfe{
+    display: flex;
+  }
+}
