@@ -42,7 +42,6 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/profile/:uid" element={<Profile_Page />} />
-        {/* Other routes */}
       </Routes>
 
 
