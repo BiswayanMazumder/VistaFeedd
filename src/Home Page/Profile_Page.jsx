@@ -9,6 +9,7 @@ import Sidebar_home_mobile from '../Components_mobile/sidebar_home_mobile';
 import Sidebar_Profile from '../Components/Sidebar_Profile';
 import Profilepage_laptop from './Sidebar Pages(Laptop)/profilepage_laptop';
 import ProfilePage_Mobile from './Sidebar Pages(Laptop)/ProfilePage_Mobile';
+import Sidebar_Profile_mobile from '../Components_mobile/sidebar_profile_mobile';
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
     authDomain: "vistafeedd.firebaseapp.com",
@@ -64,7 +65,7 @@ export default function Profile_Page() {
                 <Sidebar_Profile />
             </div>
             <div className="jnfvnkf" style={{ color: "white" }}>
-                <Sidebar_home_mobile />
+                <Sidebar_Profile_mobile />
             </div>
             <div className="jnnf">
                 <Profilepage_laptop />

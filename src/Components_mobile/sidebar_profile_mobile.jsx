@@ -22,7 +22,7 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export default function Sidebar_home_mobile() {
+export default function Sidebar_Profile_mobile() {
     const [profilepicture, setprofilepicture] = useState('');
     useEffect(() => {
         const fetchdp = async () => {
@@ -39,7 +39,7 @@ export default function Sidebar_home_mobile() {
         <div className="jjnd">
             <Link style={{ textDecoration: 'none', color: 'white' }} to={'/home'}>
                 <div className="hdjvkdv">
-                    <svg aria-label="Home" class="x1lliihq x1n2onr6 x5n08af" fill="white" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Home</title><path d="M22 23h-6.001a1 1 0 0 1-1-1v-5.455a2.997 2.997 0 1 0-5.993 0V22a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V11.543a1.002 1.002 0 0 1 .31-.724l10-9.543a1.001 1.001 0 0 1 1.38 0l10 9.543a1.002 1.002 0 0 1 .31.724V22a1 1 0 0 1-1 1Z"></path></svg>
+                <svg aria-label="Home" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Home</title><path d="M9.005 16.545a2.997 2.997 0 0 1 2.997-2.997A2.997 2.997 0 0 1 15 16.545V22h7V11.543L12 2 2 11.543V22h7.005Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </div>
             </Link>
             <Link to={"/search"} style={{ textDecoration: 'none', color: 'white' }}>
