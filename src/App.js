@@ -41,7 +41,7 @@ function App() {
         <Route path="/notifications" element={<NotificationPage />} />
       </Routes>
       <Routes>
-        <Route path="/profile/:uid" element={<Profile_Page />} />
+        <Route path="/profile" element={<Profile_Page />} />
       </Routes>
 
 

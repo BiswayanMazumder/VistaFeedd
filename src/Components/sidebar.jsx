@@ -107,10 +107,10 @@ export default function Sidebar_Home() {
                     </div>
                 </div>
             </Link>
-            <Link style={{ textDecoration: 'none' }} to={`/profile/${uid}`}>
+            <Link style={{ textDecoration: 'none' }} to={`/profile`}>
                 <div className="dnvdnvd" style={{ width: "30px", height: "30px", borderRadius: "50%" }}>
                     <img src={profilepicture} alt="" height={"30px"} width={"30px"} style={{ borderRadius: "50%" }} />
-                    <div className="bvjnv" style={{ marginTop: '7px', fontWeight: '500', marginLeft: '5px' }}>
+                    <div className="bvjnv" style={a{ marginTop: '7px', fontWeight: '500', marginLeft: '5px' }}>
                         Profile
                     </div>
                 </div>
