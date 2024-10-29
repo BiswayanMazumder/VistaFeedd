@@ -98,7 +98,7 @@ const Profilepage_laptop = () => {
         };
         fetchFollowing();
     }, []);
-
+    const [modalopen,setmodalopen]=useState(false)
     return (
         <div className="jdnvnmvnd" style={{ color: "white", overflow: "hidden" }}>
             <div className="krkmfkfvm">
@@ -188,10 +188,10 @@ const Profilepage_laptop = () => {
                             No Posts Yet
                         </div>
                     ) : (
-                        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "start", flexDirection: "row", marginLeft: "50px", alignContent: "start", width: "80%", marginTop: "10px" }}>
+                        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "start", flexDirection: "row", marginLeft: "50px", alignContent: "start", width: "80%", marginTop: "-10px" }}>
                             {postImages.map((image, index) => (
                                 <Link key={index}>
-                                    <div style={{ margin: '5px' }}>
+                                    <div style={{ margin: '5px' }} onClick={() => setmodalopen(true)}>
                                         <img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px' }} />
                                     </div>
                                 </Link>

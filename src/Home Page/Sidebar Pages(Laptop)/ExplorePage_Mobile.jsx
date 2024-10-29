@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
-import { doc, getDoc, getFirestore } from '@firebase/firestore';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+
 const firebaseConfig = {
   apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
   authDomain: "vistafeedd.firebaseapp.com",
@@ -16,16 +16,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export default function ExplorePage_laptop() {
+export default function ExplorePage_mobile() {
   const [postImages, setPostImages] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [followers, setFollowers] = useState([]);
-  const [following, setFollowing] = useState([]);
-  const [tabOpened, setTabOpened] = useState('POSTS');
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -35,7 +30,6 @@ export default function ExplorePage_laptop() {
         const snapshot = await getDoc(docsnap);
         if (snapshot.exists()) {
           const postIds = snapshot.data()['Post IDs'] || [];
-          setPosts(postIds);
           const images = await Promise.all(postIds.map(async (postId) => {
             const postRef = doc(db, "Global Post", postId);
             const postSnap = await getDoc(postRef);
@@ -47,18 +41,14 @@ export default function ExplorePage_laptop() {
     };
     fetchPosts();
   }, []);
-  useEffect(() => {
 
-  })
   return (
-    <div className="jdnvnmvnd" style={{ color: "white", width: "fit-content", backgroundColor: "black", height: "fit-content", display: "flex", justifyContent: "start", alignItems: "start", flexDirection: "row", flexWrap: "wrap", marginTop: "50px", marginLeft: "50px",marginRight:"50px" }}>
+    <div style={{ color: "white", backgroundColor: "black", display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "start",position:"fixed",top:"0" ,marginTop:"50px",width:"100%",marginLeft:"20px"}}>
       {postImages.map((image, index) => (
-        <Link key={index}>
-          <div style={{ margin: '5px' }}>
-            <img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px' }} />
-          </div>
+        <Link key={index} to={`/post/${image}`}>
+          <img src={image} alt="" height={"139px"} width={"139px"} style={{ borderRadius: '10px' }} />
         </Link>
       ))}
     </div>
-  )
+  );
 }

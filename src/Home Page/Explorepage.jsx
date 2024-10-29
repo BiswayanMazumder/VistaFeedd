@@ -8,6 +8,8 @@ import { getFirestore } from '@firebase/firestore';
 import Sidebar_Explore from '../Components/sidebar_explore';
 import Sidebar_Explore_mobile from '../Components_mobile/sidebar_explore_mobile';
 import ExplorePage_laptop from './Sidebar Pages(Laptop)/ExplorePage_laptop';
+import ProfilePage_Mobile from './Sidebar Pages(Laptop)/ProfilePage_Mobile';
+import ExplorePage_mobile from './Sidebar Pages(Laptop)/ExplorePage_Mobile';
 const firebaseConfig = {
   apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
   authDomain: "vistafeedd.firebaseapp.com",
@@ -51,8 +53,12 @@ export default function ExplorePage() {
       <div className="jnfvnkf" style={{ color: "white" }}>
         <Sidebar_Explore_mobile />
       </div>
-      <div className="jnnf">
+      <div className="jjndv">
         <ExplorePage_laptop />
+      </div>
+      <div className="jnfvnkf">
+      <ExplorePage_mobile />
+        {/* <ExplorePage_laptop /> */}
       </div>
     </div>
   )
