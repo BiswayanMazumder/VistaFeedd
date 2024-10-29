@@ -45,7 +45,7 @@ export default function ExplorePage_mobile() {
   return (
     <div style={{ color: "white", backgroundColor: "black", display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "start",position:"fixed",top:"0" ,marginTop:"50px",width:"100%",marginLeft:"20px"}}>
       {postImages.map((image, index) => (
-        <Link key={index} to={`/post/${image}`}>
+        <Link key={index}>
           <img src={image} alt="" height={"139px"} width={"139px"} style={{ borderRadius: '10px' }} />
         </Link>
       ))}
