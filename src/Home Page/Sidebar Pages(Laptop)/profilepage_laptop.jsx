@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { doc, getDoc, getFirestore } from '@firebase/firestore';
+
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
     authDomain: "vistafeedd.firebaseapp.com",
@@ -20,94 +21,95 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export default function Profilepage_laptop() {
-    const [profilepicture, setprofilepicture] = useState('');
-    const [name, setname] = useState('');
-    const [bio, setbio] = useState('');
-    useEffect(() => {
-        const fetchdp = async () => {
-            const Uid = auth.currentUser.uid;
-            const docRef = doc(db, "User Details", Uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                setprofilepicture(docSnap.data()['Profile Pic']);
-                setname(docSnap.data()['Name']);
-                setbio(docSnap.data()['Bio'] || 'No bio set');
+const Profilepage_laptop = () => {
+    const [profilePicture, setProfilePicture] = useState('');
+    const [name, setName] = useState('');
+    const [bio, setBio] = useState('No bio set');
+    const [posts, setPosts] = useState([]);
+    const [postImages, setPostImages] = useState([]);
+    const [followers, setFollowers] = useState([]);
+    const [following, setFollowing] = useState([]);
+    const [tabOpened, setTabOpened] = useState('POSTS');
 
-            }
-        }
-        fetchdp();
-    }, []);
     useEffect(() => {
-        document.title = `${name} - VistaFeedd`
-    })
-    const [posts, setposts] = useState([]);
-    const [postimages, setpostimages] = useState([]);
-    const [postcaptions, setpostcaptions] = useState([]);
-    const [followers, setfollowers] = useState([]);
-    const [following, setfollowing] = useState([]);
-    useEffect(() => {
-        const fetchposts = async () => {
-            const Uid = auth.currentUser.uid;
-            const docsnap = doc(db, "Global Post IDs", 'Posts');
-            const postids = [];
-            const snapshot = await getDoc(docsnap);
-            if (snapshot.exists()) {
-                setposts(snapshot.data()['Post IDs'] || []);
-                postids.push(snapshot.data()['Post IDs']);
-            }
-            for (var i = 0; i < postids.length; i++) {
-                const postref = doc(db, "Global Post", 'Posts', postids[i]);
-                const docSnap = await getDoc(postref);
+        const fetchUserData = async () => {
+            const uid = auth.currentUser?.uid;
+            if (uid) {
+                const docRef = doc(db, "User Details", uid);
+                const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
-                    if (docSnap.data()['Uploaded UID'] == auth.currentUser.uid) {
-                        setpostimages(docSnap.data()['Image Link']);
-                        setpostcaptions(docSnap.data()['Caption']);
-                    }
+                    const data = docSnap.data();
+                    setProfilePicture(data['Profile Pic']);
+                    setName(data['Name']);
+                    setBio(data['Bio'] || 'No bio set');
                 }
             }
-        }
-        fetchposts();
-    }, [])
+        };
+        fetchUserData();
+    }, []);
+
     useEffect(() => {
-        const fetchfollowers = async () => {
-            const Uid = auth.currentUser.uid;
-            const docsnap = doc(db, 'Followers', Uid);
-            const snapshot = await getDoc(docsnap);
-            if (snapshot.exists()) {
-                setfollowers(snapshot.data()['Followers ID'] || []);
-            }
-        }
-        fetchfollowers();
-    }
-        , [])
+        document.title = `${name} - VistaFeedd`;
+    }, [name]);
+
     useEffect(() => {
-        const fetchfollowing = async () => {
-            const Uid = auth.currentUser.uid;
-            const docsnap = doc(db, 'Following', Uid);
-            const snapshot = await getDoc(docsnap);
-            if (snapshot.exists()) {
-                setfollowers(snapshot.data()['Following ID'] || []);
+        const fetchPosts = async () => {
+            const uid = auth.currentUser?.uid;
+            if (uid) {
+                const docsnap = doc(db, "Global Post IDs", 'Posts');
+                const snapshot = await getDoc(docsnap);
+                if (snapshot.exists()) {
+                    const postIds = snapshot.data()['Post IDs'] || [];
+                    setPosts(postIds);
+                    const images = await Promise.all(postIds.map(async (postId) => {
+                        const postRef = doc(db, "Global Post", postId);
+                        const postSnap = await getDoc(postRef);
+                        return postSnap.exists() && postSnap.data()['Uploaded UID'] === uid ? postSnap.data()['Image Link'] : null;
+                    }));
+                    setPostImages(images.filter(Boolean));
+                }
             }
-        }
-        fetchfollowing();
-    }
-        , [])
-    const [tabopened, settabopened] = useState('POSTS');
+        };
+        fetchPosts();
+    }, []);
+
+    useEffect(() => {
+        const fetchFollowers = async () => {
+            const uid = auth.currentUser?.uid;
+            if (uid) {
+                const docSnap = await getDoc(doc(db, 'Followers', uid));
+                if (docSnap.exists()) {
+                    setFollowers(docSnap.data()['Followers ID'] || []);
+                }
+            }
+        };
+        fetchFollowers();
+    }, []);
+
+    useEffect(() => {
+        const fetchFollowing = async () => {
+            const uid = auth.currentUser?.uid;
+            if (uid) {
+                const docSnap = await getDoc(doc(db, 'Following', uid));
+                if (docSnap.exists()) {
+                    setFollowing(docSnap.data()['Following ID'] || []);
+                }
+            }
+        };
+        fetchFollowing();
+    }, []);
 
     return (
         <div className="jdnvnmvnd" style={{ color: "white", overflow: "hidden" }}>
             <div className="krkmfkfvm">
                 <div className="ehfjdv">
                     <div className="nkvmvdl" style={{ height: '100px', width: "100px", borderRadius: "50%", backgroundColor: "white" }}>
-                        <img src={profilepicture} alt="" height={"100px"} width={"100px"} style={{ borderRadius: "50%" }} />
+                        <img src={profilePicture} alt="" height={"100px"} width={"100px"} style={{ borderRadius: "50%" }} />
                     </div>
                 </div>
                 <div className="krmfvm">
                     <div className="mdnvmn" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
-                        <div className="ddvbnd">
-                            {name}
-                        </div>
+                        <div className="ddvbnd">{name}</div>
                         <Link style={{ textDecoration: 'none', color: "white" }}>
                             <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "grey", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
                                 Edit Profile
@@ -115,73 +117,91 @@ export default function Profilepage_laptop() {
                         </Link>
                         <Link style={{ textDecoration: 'none', color: "white" }}>
                             <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "grey", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
-                                View Archieve
+                                View Archive
                             </div>
                         </Link>
                     </div>
                     <div className="jkdnfkd">
-                        <div className="kvmf">
-                            {
-                                postimages.length > 0 ? postimages.length + ' Posts' : postimages.length + ' Post'
-                            }
-                        </div>
-                        <div className="kvmf">
-                            {
-                                followers.length > 0 ? followers.length + ' Followers' : followers.length + ' Follower'
-                            }
-                        </div>
-                        <div className="kvmf">
-                            {
-                                following.length > 0 ? following.length + ' Followings' : following.length + ' Following'
-                            }
-                        </div>
+                        <div className="kvmf">{postImages.length} {postImages.length === 1 ? 'Post' : 'Posts'}</div>
+                        <div className="kvmf">{followers.length} {followers.length === 1 ? 'Follower' : 'Followers'}</div>
+                        <div className="kvmf">{following.length} {following.length === 1 ? 'Following' : 'Followings'}</div>
                     </div>
                     <div className="jkdnfkd">
                         <div className="kvmf" style={{ display: "flex", flexDirection: "column", justifyContent: "start", alignItems: "start", textAlign: "start" }}>
                             {bio}
                         </div>
-
                     </div>
                 </div>
             </div>
             <div className="jrnknrv">
                 <Link style={{ textDecoration: 'none', color: "white" }}>
                     <div className="hvbvfvbmfnb" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
-                        <svg aria-label="" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12"><title></title><rect fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="18" x="3" y="3"></rect><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="9.015" x2="9.015" y1="3" y2="21"></line><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="14.985" x2="14.985" y1="3" y2="21"></line><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="9.015" y2="9.015"></line><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="14.985" y2="14.985"></line></svg>
-                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabopened == 'POSTS' ? "bold" : "400" }} onClick={() => settabopened('POSTS')}>
+                        <svg aria-label="" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12">
+                            <title></title>
+                            <rect fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" width="18" x="3" y="3"></rect>
+                            <line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="9.015" x2="9.015" y1="3" y2="21"></line>
+                            <line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="14.985" x2="14.985" y1="3" y2="21"></line>
+                            <line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="21" x2="3" y1="9.015" y2="9.015"></line>
+                            <line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="21" x2="3" y1="14.985" y2="14.985"></line>
+                        </svg>
+                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabOpened === 'POSTS' ? "bold" : "400" }} onClick={() => setTabOpened('POSTS')}>
                             POSTS
                         </div>
                     </div>
                 </Link>
                 <Link style={{ textDecoration: 'none', color: "white" }}>
                     <div className="hvbvfvbmfnb" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
-                        <svg aria-label="" class="x1lliihq x1n2onr6 x1roi4f4" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12"><title></title><polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polygon></svg>
-                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabopened == 'SAVED' ? "bold" : "400" }} onClick={() => settabopened('SAVED')}>
+                        <svg aria-label="" className="x1lliihq x1n2onr6 x1roi4f4" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12">
+                            <title></title>
+                            <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon>
+                        </svg>
+                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabOpened === 'SAVED' ? "bold" : "400" }} onClick={() => setTabOpened('SAVED')}>
                             SAVED
                         </div>
                     </div>
                 </Link>
                 <Link style={{ textDecoration: 'none', color: "white" }}>
                     <div className="hvbvfvbmfnb" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
-                        <svg aria-label="" class="x1lliihq x1n2onr6 x1roi4f4" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12"><title></title><path d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><circle cx="12.072" cy="11.075" fill="none" r="3.556" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle></svg>
-                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabopened == 'TAGGED' ? "bold" : "400" }} onClick={() => settabopened('TAGGED')}>
+                        <svg aria-label="" className="x1lliihq x1n2onr6 x1roi4f4" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12">
+                            <title></title>
+                            <path d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+                            <path d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+                            <circle cx="12.072" cy="11.075" fill="none" r="3.556" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></circle>
+                        </svg>
+                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabOpened === 'TAGGED' ? "bold" : "400" }} onClick={() => setTabOpened('TAGGED')}>
                             TAGGED
                         </div>
                     </div>
                 </Link>
             </div>
-            {
-                tabopened==='POSTS'?<div className="dmdnvfnvk">
-            {
-                postimages.length===0?<div className="nnjfnvj">
-            <svg aria-label="Camera" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="62" role="img" viewBox="0 0 96 96" width="62"><title>Camera</title><circle cx="48" cy="48" fill="none" r="47" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"></circle><ellipse cx="48.002" cy="49.524" fill="none" rx="10.444" ry="10.476" stroke="currentColor" stroke-linejoin="round" stroke-width="2.095"></ellipse><path d="M63.994 69A8.02 8.02 0 0 0 72 60.968V39.456a8.023 8.023 0 0 0-8.01-8.035h-1.749a4.953 4.953 0 0 1-4.591-3.242C56.61 25.696 54.859 25 52.469 25h-8.983c-2.39 0-4.141.695-5.181 3.178a4.954 4.954 0 0 1-4.592 3.242H32.01a8.024 8.024 0 0 0-8.012 8.035v21.512A8.02 8.02 0 0 0 32.007 69Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
-            <br />
-            No Posts Yet
-
-            </div>:<></>
-            }
-            </div>:<></>
-            }
+            {tabOpened === 'POSTS' && (
+                <div className="dmdnvfnvk">
+                    {postImages.length === 0 ? (
+                        <div className="nnjfnvj">
+                            <svg aria-label="Camera" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="62" role="img" viewBox="0 0 96 96" width="62">
+                                <title>Camera</title>
+                                <circle cx="48" cy="48" fill="none" r="47" stroke="currentColor" strokeMiterlimit="10" strokeWidth="2"></circle>
+                                <ellipse cx="48.002" cy="49.524" fill="none" rx="10.444" ry="10.476" stroke="currentColor" strokeLinejoin="round" strokeWidth="2.095"></ellipse>
+                                <path d="M63.994 69A8.02 8.02 0 0 0 72 60.968V39.456a8.023 8.023 0 0 0-8.01-8.035h-1.749a4.953 4.953 0 0 1-4.591-3.242C56.61 25.696 54.859 25 52.469 25h-8.983c-2.39 0-4.141.695-5.181 3.178a4.954 4.954 0 0 1-4.592 3.242H32.01a8.024 8.024 0 0 0-8.012 8.035v21.512A8.02 8.02 0 0 0 32.007 69Z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path>
+                            </svg>
+                            <br />
+                            No Posts Yet
+                        </div>
+                    ) : (
+                        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "start", flexDirection: "row", marginLeft: "50px", alignContent: "start", width: "80%", marginTop: "10px" }}>
+                            {postImages.map((image, index) => (
+                                <Link key={index}>
+                                    <div style={{ margin: '5px' }}>
+                                        <img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px' }} />
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
-    )
-}
+    );
+};
+
+export default Profilepage_laptop;

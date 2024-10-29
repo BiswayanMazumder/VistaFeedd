@@ -26,7 +26,7 @@ export default function ExplorePage_laptop() {
     })
   return (
     <div className="ffnkmkb" style={{ color: "white" }}>
-    
+    fjfvjv
     </div>
   )
 }
