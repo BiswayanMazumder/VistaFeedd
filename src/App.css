@@ -317,6 +317,21 @@
   flex-direction: column;
   font-weight: bold;
 }
+.dbfnv{
+  display: flex;
+  width: 100vw;
+  margin-top: 40px;
+  height: fit-content;
+  flex-direction: row;
+  /* gap: 30px; */
+  justify-content: space-evenly;
+  align-items: center;
+  text-align: center;
+}
+.jdhvjfnv{
+  width: 100vw;
+  height: fit-content;
+}
 @media  screen and (max-width: 1023px) {
   .jdnvnmvnd{
     display: none;
