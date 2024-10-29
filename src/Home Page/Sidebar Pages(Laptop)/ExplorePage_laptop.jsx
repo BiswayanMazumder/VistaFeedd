@@ -55,7 +55,7 @@ export default function ExplorePage_laptop() {
       {postImages.map((image, index) => (
         <Link key={index}>
           <div style={{ margin: '5px' }}>
-            <img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px' }} />
+            <img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px',marginRight:"10px" }} />
           </div>
         </Link>
       ))}
