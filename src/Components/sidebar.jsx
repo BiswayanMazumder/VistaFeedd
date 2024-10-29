@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 // import Sidebar_Home from '../Components/sidebar'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { initializeApp } from 'firebase/app';
@@ -23,6 +23,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 export default function Sidebar_Home() {
+    const user = auth.currentUser; // Get the current user
+    const uid = user ? user.uid : null;
     const [profilepicture, setprofilepicture] = useState('');
     useEffect(() => {
         const fetchdp = async () => {
@@ -105,9 +107,9 @@ export default function Sidebar_Home() {
                     </div>
                 </div>
             </Link>
-            <Link style={{ textDecoration: 'none' }} to={'/profile'}>
+            <Link style={{ textDecoration: 'none' }} to={`/profile/${uid}`}>
                 <div className="dnvdnvd" style={{ width: "30px", height: "30px", borderRadius: "50%" }}>
-                    <img src={profilepicture} alt="" height={"30px"} width={"30px"} style={{ borderRadius: "50%" }}/>
+                    <img src={profilepicture} alt="" height={"30px"} width={"30px"} style={{ borderRadius: "50%" }} />
                     <div className="bvjnv" style={{ marginTop: '7px', fontWeight: '500', marginLeft: '5px' }}>
                         Profile
                     </div>

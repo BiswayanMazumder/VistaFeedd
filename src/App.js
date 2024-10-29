@@ -17,7 +17,7 @@ function App() {
   // console.log('ENV',process.env.REACT_APP_FIREBASE_STORAGE_BUCKET);
   return (
     // <BrowserRouter>
-    
+
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landingpage />} />
@@ -41,8 +41,11 @@ function App() {
         <Route path="/notifications" element={<NotificationPage />} />
       </Routes>
       <Routes>
-        <Route path="/profile" element={<Profile_Page />} />
+        <Route path="/profile/:uid" element={<Profile_Page />} />
+        {/* Other routes */}
       </Routes>
+
+
       <Analytics />
     </BrowserRouter>
   );
