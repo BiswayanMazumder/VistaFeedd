@@ -121,6 +121,18 @@ export default function ProfilePage_Mobile() {
                 {bio}
             </div>
             <div className="dbfnv">
+                <div>
+                    {postimages.length>0?postimages.length + ' Posts':postimages.length + ' Post'}
+                </div>
+                <div>
+                {followers.length>0?followers.length + ' Followers':followers.length + ' Follower'}
+
+                </div>
+                <div>
+                    {following.length} Following
+                </div>
+            </div>
+            <div className="dbfnv">
                 <div onClick={() => { settabopened('POSTS') }}>
                     <svg aria-label="Posts" class="x1lliihq x1n2onr6 x173jzuc" fill={tabopened === 'POSTS' ? "blue" : "white"} height="24" role="img" viewBox="0 0 24 24" width="24">
                         <title>Posts</title>
