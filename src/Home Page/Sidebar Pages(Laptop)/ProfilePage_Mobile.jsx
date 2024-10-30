@@ -37,9 +37,6 @@ export default function ProfilePage_Mobile() {
         }
         fetchdp();
     }, []);
-    useEffect(() => {
-        document.title = `${name} - VistaFeedd`
-    })
     const [posts, setposts] = useState([]);
     const [postimages, setpostimages] = useState([]);
     const [postcaptions, setpostcaptions] = useState([]);

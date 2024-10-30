@@ -332,6 +332,39 @@
   width: 100vw;
   height: fit-content;
 }
+.jndvnfnf{
+  width: 40vw;
+  height: fit-content;
+  /* background-color: white; */
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  text-align: center;
+  margin-left: 20vw;
+  gap: 20px;
+  color: white;
+  margin-top: 50px;
+}
+.jjrjnv{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+}
+.jndvnfnf::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Edge */
+}
+.jdjvnfv{
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  font-size: 12px;
+  gap: 10px;
+}
+.enjfendf{
+  width: fit-content;
+}
 @media  screen and (max-width: 1023px) {
   .jdnvnmvnd{
     display: none;

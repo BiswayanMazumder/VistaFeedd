@@ -30,75 +30,68 @@ const Profilepage_laptop = () => {
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
     const [tabOpened, setTabOpened] = useState('POSTS');
-
+    const [modalOpen, setModalOpen] = useState(false);
+    
     useEffect(() => {
-        const fetchUserData = async () => {
-            const uid = auth.currentUser?.uid;
-            if (uid) {
-                const docRef = doc(db, "User Details", uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    setProfilePicture(data['Profile Pic']);
-                    setName(data['Name']);
-                    setBio(data['Bio'] || 'No bio set');
-                }
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                fetchUserData(user.uid);
+                fetchPosts(user.uid);
+                fetchFollowers(user.uid);
+                fetchFollowing(user.uid);
+            } else {
+                // Handle user not logged in
+                console.log("User not logged in");
             }
-        };
-        fetchUserData();
+        });
+
+        return () => unsubscribe(); // Cleanup subscription on unmount
     }, []);
+
+    const fetchUserData = async (uid) => {
+        const docRef = doc(db, "User Details", uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            setProfilePicture(data['Profile Pic']);
+            setName(data['Name']);
+            setBio(data['Bio'] || 'No bio set');
+        }
+    };
+
+    const fetchPosts = async (uid) => {
+        const docsnap = doc(db, "Global Post IDs", 'Posts');
+        const snapshot = await getDoc(docsnap);
+        if (snapshot.exists()) {
+            const postIds = snapshot.data()['Post IDs'] || [];
+            setPosts(postIds);
+            const images = await Promise.all(postIds.map(async (postId) => {
+                const postRef = doc(db, "Global Post", postId);
+                const postSnap = await getDoc(postRef);
+                return postSnap.exists() && postSnap.data()['Uploaded UID'] === uid ? postSnap.data()['Image Link'] : null;
+            }));
+            setPostImages(images.filter(Boolean));
+        }
+    };
+
+    const fetchFollowers = async (uid) => {
+        const docSnap = await getDoc(doc(db, 'Followers', uid));
+        if (docSnap.exists()) {
+            setFollowers(docSnap.data()['Followers ID'] || []);
+        }
+    };
+
+    const fetchFollowing = async (uid) => {
+        const docSnap = await getDoc(doc(db, 'Following', uid));
+        if (docSnap.exists()) {
+            setFollowing(docSnap.data()['Following ID'] || []);
+        }
+    };
 
     useEffect(() => {
         document.title = `${name} - VistaFeedd`;
     }, [name]);
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            const uid = auth.currentUser?.uid;
-            if (uid) {
-                const docsnap = doc(db, "Global Post IDs", 'Posts');
-                const snapshot = await getDoc(docsnap);
-                if (snapshot.exists()) {
-                    const postIds = snapshot.data()['Post IDs'] || [];
-                    setPosts(postIds);
-                    const images = await Promise.all(postIds.map(async (postId) => {
-                        const postRef = doc(db, "Global Post", postId);
-                        const postSnap = await getDoc(postRef);
-                        return postSnap.exists() && postSnap.data()['Uploaded UID'] === uid ? postSnap.data()['Image Link'] : null;
-                    }));
-                    setPostImages(images.filter(Boolean));
-                }
-            }
-        };
-        fetchPosts();
-    }, []);
-
-    useEffect(() => {
-        const fetchFollowers = async () => {
-            const uid = auth.currentUser?.uid;
-            if (uid) {
-                const docSnap = await getDoc(doc(db, 'Followers', uid));
-                if (docSnap.exists()) {
-                    setFollowers(docSnap.data()['Followers ID'] || []);
-                }
-            }
-        };
-        fetchFollowers();
-    }, []);
-
-    useEffect(() => {
-        const fetchFollowing = async () => {
-            const uid = auth.currentUser?.uid;
-            if (uid) {
-                const docSnap = await getDoc(doc(db, 'Following', uid));
-                if (docSnap.exists()) {
-                    setFollowing(docSnap.data()['Following ID'] || []);
-                }
-            }
-        };
-        fetchFollowing();
-    }, []);
-    const [modalopen,setmodalopen]=useState(false)
     return (
         <div className="jdnvnmvnd" style={{ color: "white", overflow: "hidden" }}>
             <div className="krkmfkfvm">
@@ -135,7 +128,7 @@ const Profilepage_laptop = () => {
             </div>
             <div className="jrnknrv">
                 <Link style={{ textDecoration: 'none', color: "white" }}>
-                    <div className="hvbvfvbmfnb" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
+                    <div className="hvbvfvbmfnb" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }} onClick={() => setTabOpened('POSTS')}>
                         <svg aria-label="" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12">
                             <title></title>
                             <rect fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" width="18" x="3" y="3"></rect>
@@ -144,31 +137,31 @@ const Profilepage_laptop = () => {
                             <line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="21" x2="3" y1="9.015" y2="9.015"></line>
                             <line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="21" x2="3" y1="14.985" y2="14.985"></line>
                         </svg>
-                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabOpened === 'POSTS' ? "bold" : "400" }} onClick={() => setTabOpened('POSTS')}>
+                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabOpened === 'POSTS' ? "bold" : "400" }}>
                             POSTS
                         </div>
                     </div>
                 </Link>
                 <Link style={{ textDecoration: 'none', color: "white" }}>
-                    <div className="hvbvfvbmfnb" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
+                    <div className="hvbvfvbmfnb" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }} onClick={() => setTabOpened('SAVED')}>
                         <svg aria-label="" className="x1lliihq x1n2onr6 x1roi4f4" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12">
                             <title></title>
                             <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon>
                         </svg>
-                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabOpened === 'SAVED' ? "bold" : "400" }} onClick={() => setTabOpened('SAVED')}>
+                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabOpened === 'SAVED' ? "bold" : "400" }}>
                             SAVED
                         </div>
                     </div>
                 </Link>
                 <Link style={{ textDecoration: 'none', color: "white" }}>
-                    <div className="hvbvfvbmfnb" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
+                    <div className="hvbvfvbmfnb" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }} onClick={() => setTabOpened('TAGGED')}>
                         <svg aria-label="" className="x1lliihq x1n2onr6 x1roi4f4" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12">
                             <title></title>
                             <path d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
                             <path d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
                             <circle cx="12.072" cy="11.075" fill="none" r="3.556" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></circle>
                         </svg>
-                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabOpened === 'TAGGED' ? "bold" : "400" }} onClick={() => setTabOpened('TAGGED')}>
+                        <div style={{ color: "white", fontSize: "12px", marginTop: "3px", fontWeight: tabOpened === 'TAGGED' ? "bold" : "400" }}>
                             TAGGED
                         </div>
                     </div>
@@ -191,7 +184,7 @@ const Profilepage_laptop = () => {
                         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "start", flexDirection: "row", marginLeft: "50px", alignContent: "start", width: "80%", marginTop: "-10px" }}>
                             {postImages.map((image, index) => (
                                 <Link key={index}>
-                                    <div style={{ margin: '5px' }} onClick={() => setmodalopen(true)}>
+                                    <div style={{ margin: '5px' }} onClick={() => setModalOpen(true)}>
                                         <img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px' }} />
                                     </div>
                                 </Link>
