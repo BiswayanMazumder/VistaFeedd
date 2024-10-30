@@ -33,7 +33,7 @@ export default function ExplorePage_mobile() {
           const images = await Promise.all(postIds.map(async (postId) => {
             const postRef = doc(db, "Global Post", postId);
             const postSnap = await getDoc(postRef);
-            return postSnap.exists() && postSnap.data()['Uploaded UID'] === uid ? postSnap.data()['Image Link'] : null;
+            return postSnap.exists() && postSnap.data()['Uploaded UID'] === uid ? postSnap.data()['Image Link'] : postSnap.data()['Image Link'];
           }));
           setPostImages(images.filter(Boolean));
         }
