@@ -105,7 +105,7 @@ export default function Sidebar_others() {
                     </div>
                 </div>
             </Link>
-            <Link style={{ textDecoration: 'none' }}>
+            <Link style={{ textDecoration: 'none' }} to={'/profile'}>
                 <div className="dnvdnvd" style={{ width: "30px", height: "30px", borderRadius: "50%" }}>
                     <img src={profilepicture} alt="" height={"30px"} width={"30px"} style={{ borderRadius: "50%" }}/>
                     <div className="bvjnv" style={{ marginTop: '7px', fontWeight: '500', marginLeft: '5px' }}>
