@@ -89,7 +89,7 @@ export default function HomePage_Laptop() {
                 return likesSnapshot.exists() ? likesSnapshot.data()['likes'].includes(userId) : false;
             }));
             setLiked(likesState);
-            console.log('Liked UIDs', likesuids);
+            // console.log('Liked UIDs', likesuids);
         }
     };
 
@@ -149,7 +149,7 @@ export default function HomePage_Laptop() {
             saveddata.push(savedposts);
             setsaved(savedposts);
         }
-        console.log('Saved', saveddata);
+        // console.log('Saved', saveddata);
     }
     useEffect(() => {
         fetchsaved();

@@ -7,6 +7,7 @@ import { getAnalytics } from 'firebase/analytics';
 import { getFirestore } from '@firebase/firestore';
 import Sidebar_home_mobile from '../Components_mobile/sidebar_home_mobile';
 import HomePage_Laptop from './Sidebar Pages(Laptop)/HomePage_Laptop';
+import HomePage_mobile from './Sidebar Pages(Laptop)/HomePage_mobile';
 const firebaseConfig = {
   apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
   authDomain: "vistafeedd.firebaseapp.com",
@@ -52,6 +53,9 @@ export default function Homepage() {
       </div>
       <div className="jjndv">
         <HomePage_Laptop />
+      </div>
+      <div className="jnnfe">
+        <HomePage_mobile/>
       </div>
     </div>
   )
