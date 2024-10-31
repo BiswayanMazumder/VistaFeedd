@@ -173,7 +173,7 @@ export default function HomePage_mobile() {
                         </div>
                     </div>
                     <div className="jefjn" style={{ marginTop: '30px',width:"100vw",display:"flex",justifyContent:"center",alignItems:"center" }}>
-                        <img src={image} alt="" height={'500px'} width={'80%'} style={{ borderRadius: '10px' }} />
+                        <img src={image} alt="" height={'500px'} width={'90%'} style={{ borderRadius: '10px' }} />
                     </div>
                     <div className="jefjnkrjg" style={{ display: 'flex', justifyContent: 'start', flexDirection: 'row', gap: '20px', marginTop: '10px',marginLeft:"10px" }}>
                         <Link style={{ textDecoration: 'none', color: "white" }}>
