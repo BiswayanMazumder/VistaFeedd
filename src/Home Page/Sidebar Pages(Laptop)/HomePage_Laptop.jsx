@@ -49,7 +49,7 @@ export default function HomePage_Laptop() {
 
         return () => unsubscribe();
     }, []);
-    const [likedname,setlikedname] = useState([]);
+    const [likedname, setlikedname] = useState([]);
     const fetchPosts = async (userId) => {
         const docsnap = doc(db, "Global Post IDs", 'Posts');
         const snapshot = await getDoc(docsnap);
@@ -80,7 +80,7 @@ export default function HomePage_Laptop() {
             fetchUserDetails(filteredPosts.map(post => post.uploadedUID));
 
             // Initialize liked state
-            const likesuids=[];
+            const likesuids = [];
             const likesState = await Promise.all(filteredPosts.map(async (post) => {
                 const docref = doc(db, 'Post Likes', post.Postid);
                 const likesSnapshot = await getDoc(docref);
@@ -89,7 +89,7 @@ export default function HomePage_Laptop() {
                 return likesSnapshot.exists() ? likesSnapshot.data()['likes'].includes(userId) : false;
             }));
             setLiked(likesState);
-            console.log('Liked UIDs',likesuids);
+            console.log('Liked UIDs', likesuids);
         }
     };
 
@@ -109,7 +109,7 @@ export default function HomePage_Laptop() {
         const postIDToUpdate = PostID[index];
         const isLiked = liked[index];
         const docref = doc(db, 'Post Likes', postIDToUpdate);
-        
+
         const updateData = {
             likes: isLiked ? arrayRemove(auth.currentUser.uid) : arrayUnion(auth.currentUser.uid)
         };
@@ -138,6 +138,22 @@ export default function HomePage_Laptop() {
         if (interval >= 1) return interval + " m" + (interval > 1 ? "s" : "");
         return seconds + " second" + (seconds > 1 ? "s" : "") + " ago";
     }
+    const [saved, setsaved] = useState([]);
+    const fetchsaved = async () => {
+        const uid = auth.currentUser.uid;
+        const docsnap = doc(db, "Saved Posts", uid);
+        const snapshot = await getDoc(docsnap);
+        const saveddata = [];
+        if (snapshot.exists()) {
+            const savedposts = snapshot.data()['POST IDs'] || [];
+            saveddata.push(savedposts);
+            setsaved(savedposts);
+        }
+        console.log('Saved', saveddata);
+    }
+    useEffect(() => {
+        fetchsaved();
+    }, []);
 
     return (
         <div className="jndvnfnf" style={{ overflowY: "auto", maxHeight: "90vh" }}>
@@ -174,6 +190,39 @@ export default function HomePage_Laptop() {
                                         <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path>
                                     </svg>
                                 </div>
+                                <Link style={{ textDecoration: 'none', color: "white" }}>
+                                    <div onClick={async () => {
+                                        const docref = doc(db, 'Saved Posts', auth.currentUser.uid);
+                                        const isSaved = saved.includes(PostID[index]); // Check if post is already saved
+
+                                        const datatoupdate = {
+                                            'POST IDs': isSaved ? arrayRemove(PostID[index]) : arrayUnion(PostID[index])
+                                        };
+
+                                        // Update the document in Firestore
+                                        await setDoc(docref, datatoupdate, { merge: true });
+
+                                        // Immediately update local saved state
+                                        if (isSaved) {
+                                            setsaved(prevSaved => prevSaved.filter(id => id !== PostID[index])); // Remove from state
+                                        } else {
+                                            setsaved(prevSaved => [...prevSaved, PostID[index]]); // Add to state
+                                        }
+                                    }}>
+                                        {saved.includes(PostID[index]) ? (
+                                            <svg aria-label="Remove" className="x1lliihq x1n2onr6 x5n08af" fill="white" height="24" role="img" viewBox="0 0 24 24" width="24">
+                                                <title>Remove</title>
+                                                <path d="M20 22a.999.999 0 0 1-.687-.273L12 14.815l-7.313 6.912A1 1 0 0 1 3 21V3a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1Z"></path>
+                                            </svg>
+                                        ) : (
+                                            <svg aria-label="Save" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+                                                <title>Save</title>
+                                                <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon>
+                                            </svg>
+                                        )}
+                                    </div>
+                                </Link>
+
                             </div>
                             <div className="jefjn" style={{ marginTop: '10px', fontWeight: '300', fontSize: '14px', width: '500px', display: 'flex', justifyContent: 'start', flexDirection: 'row', gap: '10px' }}>
                                 <div style={{ fontWeight: "600" }}>{uploadernames[index]}</div>
