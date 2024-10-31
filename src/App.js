@@ -45,7 +45,7 @@ function App() {
         <Route path="/profile" element={<Profile_Page />} />
       </Routes>
       <Routes>
-        <Route path="/others" element={<OtherProfile />} />
+        <Route path="/others/:otheruserid" element={<OtherProfile />} />
       </Routes>
       <Analytics />
     </BrowserRouter>

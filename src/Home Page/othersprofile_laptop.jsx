@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
@@ -22,6 +22,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const OthersProfile_Laptop = () => {
+    const {otheruserid}=useParams();
     const [profilePicture, setProfilePicture] = useState('');
     const [name, setName] = useState('');
     const [bio, setBio] = useState('No bio set');
@@ -32,16 +33,20 @@ const OthersProfile_Laptop = () => {
     const [tabOpened, setTabOpened] = useState('POSTS');
     const [modalOpen, setModalOpen] = useState(false);
     useEffect(() => {
-        var useruid=localStorage.getItem('clickeduid');
+       
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                fetchUserData(useruid);
-                fetchPosts(useruid);
-                fetchFollowers(useruid);
-                fetchFollowing(useruid);
+                fetchUserData(otheruserid);
+                fetchPosts(otheruserid);
+                fetchFollowers(otheruserid);
+                fetchFollowing(otheruserid);
             } else {
                 // Handle user not logged in
                 console.log("User not logged in");
+                fetchUserData(otheruserid);
+                fetchPosts(otheruserid);
+                fetchFollowers(otheruserid);
+                fetchFollowing(otheruserid);
             }
         });
 
