@@ -109,7 +109,7 @@ const OthersProfile_Laptop = () => {
                     <div className="mdnvmn" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
                         <div className="ddvbnd">{name}</div>
                         <Link style={{ textDecoration: 'none', color: "white" }}>
-                            <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "grey", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
+                            <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
                                 Follow
                             </div>
                         </Link>

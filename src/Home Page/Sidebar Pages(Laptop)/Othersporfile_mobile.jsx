@@ -104,7 +104,7 @@ export default function OtherProfile_Mobile() {
                     <div>{name}</div>
                     <div style={{ display: "flex", gap: "5px", marginTop: "10px" }}>
                         <Link style={{ textDecoration: 'none', color: "white" }}>
-                            <div className="button" style={{ backgroundColor: "grey", borderRadius: "5px", padding: "5px 10px", textAlign: "center", fontSize: "12px" }}>
+                            <div className="button" style={{ backgroundColor: "#0095F6", borderRadius: "5px", padding: "5px 10px", textAlign: "center", fontSize: "12px" }}>
                                 Follow
                             </div>
                         </Link>
