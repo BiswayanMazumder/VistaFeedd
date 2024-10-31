@@ -74,9 +74,8 @@ export default function Postviewing_laptop() {
         return seconds + " second" + (seconds > 1 ? "s" : "") + " ago";
     }
     return (
-        <div className="kefkek" style={{
-            height: "100vh",
-            width: "100%",
+        <div className="jnvjfnv" style={{display:"flex",justifyContent:"center",alignItems:"start",width:"100vw",height:"100vh",backgroundColor:"black"}}>
+            <div className="kefkek" style={{
             backgroundColor: "black",
             overflowY: 'auto',
             display: "flex",
@@ -95,9 +94,21 @@ export default function Postviewing_laptop() {
                                     <div style={{ color: 'grey', fontWeight: '300' }}>{formatTimeAgo(uploaddate)}</div>
                 </div>
             </div>
-            <div className="jrnvjf" style={{ marginTop: "30px", display: "flex", justifyContent: "start",marginLeft: "50px" }}>
-                <img src={image} alt="" style={{ height: '80vh', objectFit: 'contain', borderRadius: '10px' }} />
-            </div>
+            <div className="jrnvjf" style={{ marginTop: "30px", display: "flex", justifyContent: "start", marginLeft: "50px" }}>
+    <img
+        src={image}
+        alt=""
+        style={{
+            width: '80%',
+            height: 'auto', // This maintains aspect ratio based on width
+            maxHeight: '80vh', // Limit height to prevent overflow
+            objectFit: 'cover', // Crop the image to fill the space
+            borderRadius: '10px',
+        }}
+    />
+</div>
+
+
             <div className="jrnvjf" style={{ marginTop: "30px", display: "flex", justifyContent: "start",marginLeft: "50px",flexDirection:'row',gap:'10px' }}>
             <div style={{fontWeight:'600'}}>
             {name}
@@ -107,6 +118,7 @@ export default function Postviewing_laptop() {
             <div className="jrnvjf" style={{ marginTop: "30px", display: "flex", justifyContent: "start",marginLeft: "50px" }}>
                 {/* <img src={image} alt="" style={{ height: '80vh', objectFit: 'contain', borderRadius: '10px' }} /> */}
             </div>
+        </div>
         </div>
     );
 }
