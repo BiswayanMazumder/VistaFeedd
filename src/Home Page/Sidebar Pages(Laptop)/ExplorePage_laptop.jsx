@@ -30,17 +30,20 @@ export default function ExplorePage_laptop() {
   useEffect(() => {
     const fetchPosts = async () => {
       const uid = auth.currentUser?.uid;
+      const postids=[]
       if (uid) {
         const docsnap = doc(db, "Global Post IDs", 'Posts');
         const snapshot = await getDoc(docsnap);
         if (snapshot.exists()) {
           const postIds = snapshot.data()['Post IDs'] || [];
-          setPosts(postIds);
           const images = await Promise.all(postIds.map(async (postId) => {
             const postRef = doc(db, "Global Post", postId);
             const postSnap = await getDoc(postRef);
-            return postSnap.data()['Image Link'];
+            postids.push(postSnap.data()['postid'])
+            return postSnap.data()['Image Link'] ;
           }));
+          console.log(postids)
+          setPosts(postids);
           setPostImages(images.filter(Boolean));
         }
       }
@@ -53,7 +56,7 @@ export default function ExplorePage_laptop() {
   return (
     <div className="jdnvnmvnd" style={{ color: "white", width: "fit-content", backgroundColor: "black", height: "fit-content", display: "flex", justifyContent: "start", alignItems: "start", flexDirection: "row", flexWrap: "wrap", marginTop: "50px", marginLeft: "50px",marginRight:"50px" }}>
       {postImages.map((image, index) => (
-        <Link key={index}>
+        <Link key={index} to={`/post/${posts[index]}`}>
           <div style={{ margin: '5px' }}>
             <img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px',marginRight:"10px" }} />
           </div>
