@@ -164,9 +164,9 @@ export default function HomePage_Laptop() {
                             <div className="jdjvnfv" style={{ height: '40px', width: '40px', borderRadius: '50%' }}>
                                 <img src={uploaderpfps[index]} alt="" height={40} width={40} style={{ borderRadius: '50%' }} />
                                 <div style={{ marginTop: '15px', whiteSpace: 'nowrap', overflow: 'visible', textOverflow: 'ellipsis', maxWidth: '120px', fontSize: '14px', display: 'flex', justifyContent: 'start', flexDirection: 'row', gap: '5px' }} className='enjfendf'>
-                                <Link style={{ textDecoration: 'none', color: 'white' }}>
+                                <Link style={{ textDecoration: 'none', color: 'white' }} to={'/others'}>
                             <div onClick={()=>{
-                                localStorage.setItem('clickeduid', uploadernames[index]);
+                                localStorage.setItem('clickeduid', uploadeduid[index]);
                             }}>{uploadernames[index]}</div>
                             </Link>
                                     <div style={{ color: 'grey' }}>•</div>
