@@ -164,7 +164,11 @@ export default function HomePage_Laptop() {
                             <div className="jdjvnfv" style={{ height: '40px', width: '40px', borderRadius: '50%' }}>
                                 <img src={uploaderpfps[index]} alt="" height={40} width={40} style={{ borderRadius: '50%' }} />
                                 <div style={{ marginTop: '15px', whiteSpace: 'nowrap', overflow: 'visible', textOverflow: 'ellipsis', maxWidth: '120px', fontSize: '14px', display: 'flex', justifyContent: 'start', flexDirection: 'row', gap: '5px' }} className='enjfendf'>
-                                    <div>{uploadernames[index]}</div>
+                                <Link style={{ textDecoration: 'none', color: 'white' }}>
+                            <div onClick={()=>{
+                                localStorage.setItem('clickeduid', uploadernames[index]);
+                            }}>{uploadernames[index]}</div>
+                            </Link>
                                     <div style={{ color: 'grey' }}>•</div>
                                     <div style={{ color: 'grey', fontWeight: '300' }}>{formatTimeAgo(uploaddates[index])}</div>
                                 </div>
