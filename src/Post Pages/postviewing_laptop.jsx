@@ -56,7 +56,7 @@ export default function Postviewing_laptop() {
     
     useEffect(() => {
         fetchpostdetails();
-    }, []);
+    }, [fetchpostdetails]);
     function formatTimeAgo(timestamp) {
         const now = new Date();
         const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
