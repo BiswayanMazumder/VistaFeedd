@@ -137,7 +137,7 @@ export default function HomePage_mobile() {
       interval = Math.floor(seconds / 2592000);
       if (interval >= 1) return interval + " M" + (interval > 1 ? "s" : "");
       interval = Math.floor(seconds / 86400);
-      if (interval >= 1) return interval + " d" + (interval > 1 ? "s" : "");
+      if (interval >= 1) return interval + " d" + (interval > 1 ? "" : "");
       interval = Math.floor(seconds / 3600);
       if (interval >= 1) return interval + " h" + (interval > 1 ? "s" : "");
       interval = Math.floor(seconds / 60);
