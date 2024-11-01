@@ -51,6 +51,13 @@ export default function HomePage_Laptop() {
     }, []);
     const [likedname, setlikedname] = useState([]);
     const fetchPosts = async (userId) => {
+        const Following=[];
+        const docSnap=doc(db,'Following',userId);
+        const followingSnap=await getDoc(docSnap);
+        if(followingSnap.exists()){
+            Following.push(...followingSnap.data()['Following ID']||[]);
+        }
+        console.log('Following',Following);
         const docsnap = doc(db, "Global Post IDs", 'Posts');
         const snapshot = await getDoc(docsnap);
         if (snapshot.exists()) {
@@ -71,7 +78,7 @@ export default function HomePage_Laptop() {
                 };
             }));
 
-            const filteredPosts = postsData.filter(post => post.uploadedUID !== userId);
+            const filteredPosts = postsData.filter(post => post.uploadedUID !== userId && Following.includes(post.uploadedUID));
             setPostImages(filteredPosts.map(post => post.imageLink).filter(Boolean));
             setcaptions(filteredPosts.map(post => post.caption));
             setUploaddates(filteredPosts.map(post => post.uploadDate));
