@@ -132,9 +132,11 @@ const OthersProfile_Laptop = () => {
                 <div className="krmfvm">
                     <div className="mdnvmn" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
                         <div className="ddvbnd">{name}</div>
-                        <Link style={{ textDecoration: 'none', color: "white" }}>
-                            <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: followed?"gray":"#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }} onClick={async()=>{
-                                if(!followed){
+                        {
+                            auth.currentUser?<Link style={{ textDecoration: 'none', color: "white" }}>
+                            <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: auth.currentUser.uid===otheruserid?"gray":followed?"gray":"#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }} onClick={async()=>{
+                                if(auth.currentUser.uid!=otheruserid){
+                                    if(!followed){
                                     const docref=doc(db,'Following',auth.currentUser.uid);
                                 const datatoupdate={
                                     'Following ID':arrayUnion(otheruserid)
@@ -161,10 +163,16 @@ const OthersProfile_Laptop = () => {
                                 setfollwed(false);
                                 followers.length-=1;
                                 }
+                                }
                             }}>
-                                {followed?'Following':'Follow'}
+                                {auth.currentUser.uid===otheruserid?"Edit Profile":followed?'Following':'Follow'}
                             </div>
+                        </Link>:<Link style={{ textDecoration: 'none', color: "white" }} to={'/'}>
+                        <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor:"#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
+                            Login
+                        </div>
                         </Link>
+                        }
                         <Link style={{ textDecoration: 'none', color: "white" }}>
                             <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "grey", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
                                 Message

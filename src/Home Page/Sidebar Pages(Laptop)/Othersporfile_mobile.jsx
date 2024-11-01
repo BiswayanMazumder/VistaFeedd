@@ -129,8 +129,9 @@ export default function OtherProfile_Mobile() {
                 <div className="profile-info" style={{ display: "flex", flexDirection: "column" }}>
                     <div>{name}</div>
                     <div style={{ display: "flex", gap: "5px", marginTop: "10px" }}>
-                        <Link style={{ textDecoration: 'none', color: "white" }}>
-                            <div className="button" style={{ backgroundColor:followed?"gray" :"#0095F6", borderRadius: "5px", padding: "5px 10px", textAlign: "center", fontSize: "12px" }} onClick={async()=>{
+                        {auth.currentUser?<Link style={{ textDecoration: 'none', color: "white" }}>
+                            <div className="button" style={{ backgroundColor:auth.currentUser.uid===otheruserid?"gray":followed?"gray":"#0095F6", borderRadius: "5px", padding: "5px 10px", textAlign: "center", fontSize: "12px" }} onClick={async()=>{
+                               if(auth.currentUser.uid!=otheruserid){
                                 if(!followed){
                                     const docref=doc(db,'Following',auth.currentUser.uid);
                                 const datatoupdate={
@@ -158,10 +159,15 @@ export default function OtherProfile_Mobile() {
                                 setfollwed(false);
                                 followers.length-=1;
                                 }
+                               }
                             }}>
-                            {followed?'Following':'Follow'}
+                             {auth.currentUser.uid===otheruserid?"Edit Profile":followed?'Following':'Follow'}
                             </div>
-                        </Link>
+                        </Link>:<Link style={{ textDecoration: 'none', color: "white" }} to={'/'}>
+                        <div className="button" style={{ backgroundColor:followed?"gray" :"#0095F6", borderRadius: "5px", padding: "5px 10px", textAlign: "center", fontSize: "12px" }}>
+                            Login
+                            </div>
+                        </Link>}
                         <Link style={{ textDecoration: 'none', color: "white" }}>
                             <div className="button" style={{ backgroundColor: "grey", borderRadius: "5px", padding: "5px 10px", textAlign: "center", fontSize: "12px" }}>
                                 Message
