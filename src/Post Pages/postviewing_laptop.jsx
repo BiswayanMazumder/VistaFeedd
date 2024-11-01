@@ -84,7 +84,27 @@ export default function Postviewing_laptop() {
             alignItems: "start",
             color: "white"
         }}>
-            <div className="rnvnfv" style={{ marginTop: "50px", display: 'flex', alignItems: 'center',marginLeft: "50px"}}>
+        <Link to={'/home'}>
+                <div className="jjvnkvn" style={{position:"fixed",left:'0',marginBottom:"10px"}}>
+                    <svg width="100" height="30" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="100" height="30" fill="black" rx="5" />
+                        <text
+                            x="50%"
+                            y="50%"
+                            fontFamily="'Lobster', cursive"
+                            fontSize="21"
+                            fill="white"
+                            textAnchor="middle"
+                            alignmentBaseline="middle"
+                            dominantBaseline="middle"
+                        >
+                            VistaFeedd
+                        </text>
+                    </svg>
+                </div>
+
+            </Link>
+            <div className="rnvnfv" style={{ marginTop: "80px", display: 'flex', alignItems: 'center',marginLeft: "50px"}}>
                 <img src={pfp} alt="" style={{ borderRadius: '50%' }} height={40} width={40} />
                 <div style={{ marginLeft: "10px", color: "white", fontSize: "15px" ,display:"flex",flexDirection:"row",gap:"10px"}}>
                     <Link to={`/others/${uploaduid}`} style={{textDecoration:"none",color:"white"}}>
