@@ -60,19 +60,31 @@ const Profilepage_laptop = () => {
     };
 
     const fetchPosts = async (uid) => {
+        const postIds = [];
         const docsnap = doc(db, "Global Post IDs", 'Posts');
         const snapshot = await getDoc(docsnap);
+        
         if (snapshot.exists()) {
-            const postIds = snapshot.data()['Post IDs'] || [];
-            setPosts(postIds);
-            const images = await Promise.all(postIds.map(async (postId) => {
+            const ids = snapshot.data()['Post IDs'] || [];
+            const images = await Promise.all(ids.map(async (postId) => {
                 const postRef = doc(db, "Global Post", postId);
                 const postSnap = await getDoc(postRef);
-                return postSnap.exists() && postSnap.data()['Uploaded UID'] === uid ? postSnap.data()['Image Link'] : null;
+                
+                if (postSnap.exists()) {
+                    const postData = postSnap.data();
+                    if (postData['Uploaded UID'] === uid) {
+                        postIds.push(postData['postid']); // Store the postid
+                        return postData['Image Link'];
+                    }
+                }
+                return null; // If post doesn't exist or UID doesn't match
             }));
-            setPostImages(images.filter(Boolean));
+            
+            setPosts(postIds); // Set the post IDs to state
+            setPostImages(images.filter(Boolean)); // Filter out null values
         }
     };
+    
 
     const fetchFollowers = async (uid) => {
         const docSnap = await getDoc(doc(db, 'Followers', uid));
@@ -183,7 +195,7 @@ const Profilepage_laptop = () => {
                     ) : (
                         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "start", flexDirection: "row", marginLeft: "50px", alignContent: "start", width: "80%", marginTop: "-10px" }}>
                             {postImages.map((image, index) => (
-                                <Link key={index}>
+                                <Link key={index} to={`/post/${posts[index]}`}>
                                     <div style={{ margin: '5px' }} onClick={() => setModalOpen(true)}>
                                         <img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px' }} />
                                     </div>

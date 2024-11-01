@@ -42,8 +42,10 @@ export default function ProfilePage_Mobile() {
     const [postcaptions, setpostcaptions] = useState([]);
     const [followers, setfollowers] = useState([]);
     const [following, setfollowing] = useState([]);
+    const [Posts, setPosts] = useState([]);
     useEffect(() => {
         const fetchPosts = async () => {
+            const postuids=[];
             const user = auth.currentUser;
             if (user) {
                 const Uid = user.uid;
@@ -53,11 +55,14 @@ export default function ProfilePage_Mobile() {
                     const postids = snapshot.data()['Post IDs'] || [];
                     setposts(postids);
                     const images = [];
+                    
                     for (const postId of postids) {
                         const postref = doc(db, "Global Post", postId);
                         const docSnap = await getDoc(postref);
                         if (docSnap.exists()) {
                             if (docSnap.data()['Uploaded UID'] === Uid) {
+                                postuids.push(docSnap.data()['postid'])
+                                // setPosts(docsnap.data().postid)
                                 const imageLink = docSnap.data()['Image Link'];
                                 if (typeof imageLink === 'string') {
                                     images.push(imageLink);
@@ -65,6 +70,7 @@ export default function ProfilePage_Mobile() {
                             }
                         }
                     }
+                    setPosts(postuids);
                     setpostimages(images);
                 }
             }
@@ -150,7 +156,7 @@ export default function ProfilePage_Mobile() {
                         </div>
                         ) : (
                             postimages.map((image, index) => (
-                                <Link key={index} style={{ margin: '5px' }}>
+                                <Link key={index} style={{ margin: '5px' }} to={`/Post/${Posts[index]}`}>
                                     <img src={image} alt="" style={{ width: "139px", height: "139px", borderRadius: '10px' }} />
                                 </Link>
                             ))

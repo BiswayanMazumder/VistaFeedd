@@ -46,27 +46,37 @@ export default function OtherProfile_Mobile() {
     const [following, setfollowing] = useState([]);
     const [tabopened, settabopened] = useState('POSTS');
 
+    const [Posts, setPosts] = useState([]);
     useEffect(() => {
         const fetchPosts = async () => {
-            const docsnap = doc(db, "Global Post IDs", 'Posts');
-            const snapshot = await getDoc(docsnap);
-            if (snapshot.exists()) {
-                const postids = snapshot.data()['Post IDs'] || [];
-                setposts(postids);
-                const images = [];
-                for (const postId of postids) {
-                    const postref = doc(db, "Global Post", postId);
-                    const docSnap = await getDoc(postref);
-                    if (docSnap.exists()) {
-                        if (docSnap.data()['Uploaded UID'] === otheruserid) {
-                            const imageLink = docSnap.data()['Image Link'];
-                            if (typeof imageLink === 'string') {
-                                images.push(imageLink);
+            const postuids=[];
+            const user = auth.currentUser;
+            if (user) {
+                const Uid = user.uid;
+                const docsnap = doc(db, "Global Post IDs", 'Posts');
+                const snapshot = await getDoc(docsnap);
+                if (snapshot.exists()) {
+                    const postids = snapshot.data()['Post IDs'] || [];
+                    setposts(postids);
+                    const images = [];
+                    
+                    for (const postId of postids) {
+                        const postref = doc(db, "Global Post", postId);
+                        const docSnap = await getDoc(postref);
+                        if (docSnap.exists()) {
+                            if (docSnap.data()['Uploaded UID'] === otheruserid) {
+                                postuids.push(docSnap.data()['postid'])
+                                // setPosts(docsnap.data().postid)
+                                const imageLink = docSnap.data()['Image Link'];
+                                if (typeof imageLink === 'string') {
+                                    images.push(imageLink);
+                                }
                             }
                         }
                     }
+                    setPosts(postuids);
+                    setpostimages(images);
                 }
-                setpostimages(images);
             }
         };
         fetchPosts();
@@ -148,7 +158,7 @@ export default function OtherProfile_Mobile() {
                             </div>
                         ) : (
                             postimages.map((image, index) => (
-                                <Link key={index} style={{ margin: '5px' }}>
+                                <Link key={index} style={{ margin: '5px' }} to={`/post/${Posts[index]}`}>
                                     <img src={image} alt="" style={{ width: "139px", height: "139px", borderRadius: '10px' }} />
                                 </Link>
                             ))
