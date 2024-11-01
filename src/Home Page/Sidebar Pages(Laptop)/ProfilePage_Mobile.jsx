@@ -78,29 +78,24 @@ export default function ProfilePage_Mobile() {
         fetchPosts();
     }, []);
     useEffect(() => {
-        const fetchfollowers = async () => {
-            const Uid = auth.currentUser.uid;
-            const docsnap = doc(db, 'Followers', Uid);
-            const snapshot = await getDoc(docsnap);
-            if (snapshot.exists()) {
-                setfollowers(snapshot.data()['Followers ID'] || []);
+        const fetchFollowers = async () => {
+            const docSnap = await getDoc(doc(db, 'Followers', auth.currentUser.uid));
+            if (docSnap.exists()) {
+                setfollowers(docSnap.data()['Followers ID'] || []);
             }
-        }
-        fetchfollowers();
+        };
+        fetchFollowers();
     }
         , [])
     useEffect(() => {
-        const fetchfollowing = async () => {
-            const Uid = auth.currentUser.uid;
-            const docsnap = doc(db, 'Following', Uid);
-            const snapshot = await getDoc(docsnap);
-            if (snapshot.exists()) {
-                setfollowers(snapshot.data()['Following ID'] || []);
+        const fetchFollowing = async () => {
+            const docSnap = await getDoc(doc(db, 'Following', auth.currentUser.uid));
+            if (docSnap.exists()) {
+                setfollowing(docSnap.data()['Following ID'] || []);
             }
-        }
-        fetchfollowing();
-    }
-        , [])
+        };
+        fetchFollowing();
+    },[])
     const [tabopened, settabopened] = useState('POSTS')
     return (
         <div className="profile-container" style={{ color: "white", overflow: "hidden", padding: "20px" }}>
