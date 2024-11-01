@@ -128,8 +128,8 @@ export default function ProfilePage_Mobile() {
                 {bio}
             </div>
             <div className="profile-stats" style={{ display: "flex", gap: "20px", marginTop: "20px",width:"85vw",justifyContent:"space-evenly" }}>
-                <div>{postimages.length} {postimages.length === 1 ? 'Post' : 'Posts'}</div>
-                <div>{followers.length} {followers.length === 1 ? 'Follower' : 'Followers'}</div>
+                <div>{postimages.length} {postimages.length === 1 || postimages.length === 0 ? 'Post' : 'Posts'}</div>
+                <div>{followers.length} {followers.length === 1 || followers.length === 0 ? 'Follower' : 'Followers'}</div>
                 <div>{following.length} Following</div>
             </div>
             <div className="tab-navigation" style={{ marginTop: "20px", display: "flex", gap: "20px" }}>

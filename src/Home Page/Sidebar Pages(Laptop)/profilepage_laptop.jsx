@@ -127,9 +127,9 @@ const Profilepage_laptop = () => {
                         </Link>
                     </div>
                     <div className="jkdnfkd">
-                        <div className="kvmf">{postImages.length} {postImages.length === 1 ? 'Post' : 'Posts'}</div>
-                        <div className="kvmf">{followers.length} {followers.length === 1 ? 'Follower' : 'Followers'}</div>
-                        <div className="kvmf">{following.length} {following.length === 1 ? 'Following' : 'Followings'}</div>
+                        <div className="kvmf">{postImages.length} {postImages.length === 1 || postImages.length === 0 ? 'Post' : 'Posts'}</div>
+                        <div className="kvmf">{followers.length} {followers.length === 1 || followers.length === 0 ? 'Follower' : 'Followers'}</div>
+                        <div className="kvmf">{following.length} {following.length === 1 || following.length === 0 ? 'Following' : 'Followings'}</div>
                     </div>
                     <div className="jkdnfkd">
                         <div className="kvmf" style={{ display: "flex", flexDirection: "column", justifyContent: "start", alignItems: "start", textAlign: "start" }}>

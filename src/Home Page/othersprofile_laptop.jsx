@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { doc, getDoc, getFirestore } from '@firebase/firestore';
+import { arrayRemove, arrayUnion, doc, getDoc, getFirestore, setDoc } from '@firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
@@ -40,6 +40,7 @@ const OthersProfile_Laptop = () => {
                 fetchPosts(otheruserid);
                 fetchFollowers(otheruserid);
                 fetchFollowing(otheruserid);
+                fetchuserfollowers(auth.currentUser.uid)
             } else {
                 // Handle user not logged in
                 console.log("User not logged in");
@@ -89,11 +90,23 @@ const OthersProfile_Laptop = () => {
             setPostImages(images.filter(Boolean)); // Filter out null values
         }
     };
-
+    const [followed,setfollwed]=useState(false);
+    const fetchuserfollowers=async(uid)=>{
+        console.log("Fetching userfollowers");
+        const Followers=[];
+        const docSnap = await getDoc(doc(db, 'Followers', otheruserid));
+        if (docSnap.exists()) {
+            Followers.push(...docSnap.data()['Followers ID'] || []);
+            console.log('Followers', Followers);
+            // setFollowing(docSnap.data()['Following ID'] || []);
+            setfollwed(Followers.includes(auth.currentUser.uid));
+        }
+    }
     const fetchFollowers = async (uid) => {
         const docSnap = await getDoc(doc(db, 'Followers', uid));
         if (docSnap.exists()) {
             setFollowers(docSnap.data()['Followers ID'] || []);
+            
         }
     };
 
@@ -107,7 +120,7 @@ const OthersProfile_Laptop = () => {
     useEffect(() => {
         document.title = `${name} - VistaFeedd`;
     }, [name]);
-
+    
     return (
         <div className="jdnvnmvnd" style={{ color: "white", overflow: "hidden" }}>
             <div className="krkmfkfvm">
@@ -120,8 +133,36 @@ const OthersProfile_Laptop = () => {
                     <div className="mdnvmn" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
                         <div className="ddvbnd">{name}</div>
                         <Link style={{ textDecoration: 'none', color: "white" }}>
-                            <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
-                                Follow
+                            <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: followed?"gray":"#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }} onClick={async()=>{
+                                if(!followed){
+                                    const docref=doc(db,'Following',auth.currentUser.uid);
+                                const datatoupdate={
+                                    'Following ID':arrayUnion(otheruserid)
+                                }
+                                await setDoc(docref,datatoupdate,{merge:true});
+                                const docrefs=doc(db,'Followers',otheruserid);
+                                const datatoupdates={
+                                    'Followers ID':arrayUnion(auth.currentUser.uid)
+                                }
+                                await setDoc(docrefs,datatoupdates,{merge:true});
+                                setfollwed(true);
+                                followers.length+=1;
+                                }else{
+                                    const docref=doc(db,'Following',auth.currentUser.uid);
+                                const datatoupdate={
+                                    'Following ID':arrayRemove(otheruserid)
+                                }
+                                await setDoc(docref,datatoupdate,{merge:true});
+                                const docrefs=doc(db,'Followers',otheruserid);
+                                const datatoupdates={
+                                    'Followers ID':arrayRemove(auth.currentUser.uid)
+                                }
+                                await setDoc(docrefs,datatoupdates,{merge:true});
+                                setfollwed(false);
+                                followers.length-=1;
+                                }
+                            }}>
+                                {followed?'Following':'Follow'}
                             </div>
                         </Link>
                         <Link style={{ textDecoration: 'none', color: "white" }}>
@@ -131,9 +172,9 @@ const OthersProfile_Laptop = () => {
                         </Link>
                     </div>
                     <div className="jkdnfkd">
-                        <div className="kvmf">{postImages.length} {postImages.length === 1 ? 'Post' : 'Posts'}</div>
-                        <div className="kvmf">{followers.length} {followers.length === 1 ? 'Follower' : 'Followers'}</div>
-                        <div className="kvmf">{following.length} {following.length === 1 ? 'Following' : 'Followings'}</div>
+                        <div className="kvmf">{postImages.length} {postImages.length === 1 || postImages.length === 0 ? 'Post' : 'Posts'}</div>
+                        <div className="kvmf">{followers.length} {followers.length === 1 || followers.length === 0 ? 'Follower' : 'Followers'}</div>
+                        <div className="kvmf">{following.length} {following.length === 1 ? 'Following' : 'Following'}</div>
                     </div>
                     <div className="jkdnfkd">
                         <div className="kvmf" style={{ display: "flex", flexDirection: "column", justifyContent: "start", alignItems: "start", textAlign: "start" }}>

@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { doc, getDoc, getFirestore } from '@firebase/firestore';
+import { arrayRemove, arrayUnion, doc, getDoc, getFirestore, setDoc } from '@firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
@@ -103,7 +103,23 @@ export default function OtherProfile_Mobile() {
         };
         fetchfollowing();
     }, [otheruserid]);
-
+    const [followed,setfollwed]=useState(false);
+    const fetchuserfollowers=async(uid)=>{
+        const Followers=[];
+        const docSnap = await getDoc(doc(db, 'Followers', otheruserid));
+        if (docSnap.exists()) {
+            Followers.push(...docSnap.data()['Followers ID'] || []);
+            console.log('Followers', Followers);
+            // setFollowing(docSnap.data()['Following ID'] || []);
+            setfollwed(Followers.includes(auth.currentUser.uid));
+        }
+    }
+    useEffect(() => {
+        const loggedin=auth.currentUser;
+        if(loggedin){
+            fetchuserfollowers(auth.currentUser.uid);
+        }
+    }, [otheruserid]);
     return (
         <div className="profile-container" style={{ color: "white", overflow: "hidden", padding: "20px" }}>
             <div className="profile-header" style={{ display: "flex", flexDirection: "row", gap: "20px", marginTop: "20px", alignItems: "center" }}>
@@ -114,8 +130,36 @@ export default function OtherProfile_Mobile() {
                     <div>{name}</div>
                     <div style={{ display: "flex", gap: "5px", marginTop: "10px" }}>
                         <Link style={{ textDecoration: 'none', color: "white" }}>
-                            <div className="button" style={{ backgroundColor: "#0095F6", borderRadius: "5px", padding: "5px 10px", textAlign: "center", fontSize: "12px" }}>
-                                Follow
+                            <div className="button" style={{ backgroundColor:followed?"gray" :"#0095F6", borderRadius: "5px", padding: "5px 10px", textAlign: "center", fontSize: "12px" }} onClick={async()=>{
+                                if(!followed){
+                                    const docref=doc(db,'Following',auth.currentUser.uid);
+                                const datatoupdate={
+                                    'Following ID':arrayUnion(otheruserid)
+                                }
+                                await setDoc(docref,datatoupdate,{merge:true});
+                                const docrefs=doc(db,'Followers',otheruserid);
+                                const datatoupdates={
+                                    'Followers ID':arrayUnion(auth.currentUser.uid)
+                                }
+                                await setDoc(docrefs,datatoupdates,{merge:true});
+                                setfollwed(true);
+                                followers.length+=1;
+                                }else{
+                                    const docref=doc(db,'Following',auth.currentUser.uid);
+                                const datatoupdate={
+                                    'Following ID':arrayRemove(otheruserid)
+                                }
+                                await setDoc(docref,datatoupdate,{merge:true});
+                                const docrefs=doc(db,'Followers',otheruserid);
+                                const datatoupdates={
+                                    'Followers ID':arrayRemove(auth.currentUser.uid)
+                                }
+                                await setDoc(docrefs,datatoupdates,{merge:true});
+                                setfollwed(false);
+                                followers.length-=1;
+                                }
+                            }}>
+                            {followed?'Following':'Follow'}
                             </div>
                         </Link>
                         <Link style={{ textDecoration: 'none', color: "white" }}>
@@ -130,8 +174,8 @@ export default function OtherProfile_Mobile() {
                 {bio}
             </div>
             <div className="profile-stats" style={{ display: "flex", gap: "20px", marginTop: "20px", width: "85vw", justifyContent: "space-evenly" }}>
-                <div>{postimages.length} {postimages.length === 1 ? 'Post' : 'Posts'}</div>
-                <div>{followers.length} {followers.length === 1 ? 'Follower' : 'Followers'}</div>
+                <div>{postimages.length} {postimages.length === 1 || postimages.length === 0 ? 'Post' : 'Posts'}</div>
+                <div>{followers.length} {followers.length === 1 || followers.length === 0 ? 'Follower' : 'Followers'}</div>
                 <div>{following.length} Following</div>
             </div>
             <div className="tab-navigation" style={{ marginTop: "20px", display: "flex", gap: "20px" }}>
