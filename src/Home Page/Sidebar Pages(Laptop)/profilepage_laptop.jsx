@@ -103,7 +103,43 @@ const Profilepage_laptop = () => {
     useEffect(() => {
         document.title = `${name} - VistaFeedd`;
     }, [name]);
-
+    const [saved, setsaved] = useState([]);
+    const [savedimage,setsavedimage] = useState([]);
+    const [savedpost, setsavedpost] = useState([]);
+    const fetchsaved = async () => {
+        const uid = auth.currentUser.uid;
+        const docsnap = doc(db, "Saved Posts", uid);
+        const snapshot = await getDoc(docsnap);
+        const saveddata = []; // Array to hold post ID
+        const savedimages=[];
+        const savedpostid=[]
+        if (snapshot.exists()) {
+            const savedposts = snapshot.data()['POST IDs'] || [];
+            // Push each ID individually to saveddata
+            saveddata.push(...savedposts); // Spread operator to flatten
+            setsaved(savedposts);
+        }
+    
+        console.log(`Saved`, saveddata);
+    
+        for (let i = 0; i < saveddata.length; i++) {
+            const postRef = doc(db, "Global Post", saveddata[i]); // Use saveddata[i] directly
+            const postSnap = await getDoc(postRef);
+            
+            if (postSnap.exists()) {
+                const postData = postSnap.data();
+                savedpostid.push(postData['postid']);
+                savedimages.push(postData['Image Link']);
+            }
+            // console.log('Images',savedimages);
+        }
+        setsavedpost(savedpostid);
+        setsavedimage(savedimages);
+    };
+    
+    useEffect(() => {
+        fetchsaved();
+    }, []);
     return (
         <div className="jdnvnmvnd" style={{ color: "white", overflow: "hidden" }}>
             <div className="krkmfkfvm">
@@ -198,6 +234,32 @@ const Profilepage_laptop = () => {
                                 <Link key={index} to={`/post/${posts[index]}`}>
                                     <div style={{ margin: '5px' }} onClick={() => setModalOpen(true)}>
                                         <img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px' }} />
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
+            {tabOpened === 'SAVED' && (
+                <div className="dmdnvfnvk">
+                    {savedpost.length === 0 ? (
+                        <div className="nnjfnvj">
+                            <svg aria-label="Camera" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="62" role="img" viewBox="0 0 96 96" width="62">
+                                <title>Camera</title>
+                                <circle cx="48" cy="48" fill="none" r="47" stroke="currentColor" strokeMiterlimit="10" strokeWidth="2"></circle>
+                                <ellipse cx="48.002" cy="49.524" fill="none" rx="10.444" ry="10.476" stroke="currentColor" strokeLinejoin="round" strokeWidth="2.095"></ellipse>
+                                <path d="M63.994 69A8.02 8.02 0 0 0 72 60.968V39.456a8.023 8.023 0 0 0-8.01-8.035h-1.749a4.953 4.953 0 0 1-4.591-3.242C56.61 25.696 54.859 25 52.469 25h-8.983c-2.39 0-4.141.695-5.181 3.178a4.954 4.954 0 0 1-4.592 3.242H32.01a8.024 8.024 0 0 0-8.012 8.035v21.512A8.02 8.02 0 0 0 32.007 69Z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path>
+                            </svg>
+                            <br />
+                            No Saved Posts Yet
+                        </div>
+                    ) : (
+                        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "start", flexDirection: "row", marginLeft: "50px", alignContent: "start", width: "80%", marginTop: "-10px" }}>
+                            {savedpost.map((image, index) => (
+                                <Link key={index} to={`/post/${savedpost[index]}`}>
+                                    <div style={{ margin: '5px' }} onClick={() => setModalOpen(true)}>
+                                        <img src={savedimage[index]} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px' }} />
                                     </div>
                                 </Link>
                             ))}
