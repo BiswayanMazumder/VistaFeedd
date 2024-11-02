@@ -113,7 +113,7 @@ export default function ProfilePage_Mobile() {
             setsaved(savedposts);
         }
     
-        console.log(`Saved`, saveddata);
+        // console.log(`Saved`, saveddata);
     
         for (let i = 0; i < saveddata.length; i++) {
             const postRef = doc(db, "Global Post", saveddata[i]); // Use saveddata[i] directly
