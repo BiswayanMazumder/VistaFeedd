@@ -57,7 +57,7 @@ export default function HomePage_Laptop() {
         if(followingSnap.exists()){
             Following.push(...followingSnap.data()['Following ID']||[]);
         }
-        // console.log('Following',Following);
+        // console.log('Following',Following); 
         const docsnap = doc(db, "Global Post IDs", 'Posts');
         const snapshot = await getDoc(docsnap);
         if (snapshot.exists()) {
