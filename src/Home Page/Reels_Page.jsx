@@ -9,6 +9,8 @@ import Sidebar_Explore from '../Components/sidebar_explore';
 import Sidebar_Search from '../Components/sidebar_search';
 import Sidebar_Reels from '../Components/Sidebar_reels';
 import Sidebar_reels_mobile from '../Components_mobile/Sidebar_reels_mobile';
+import ReelPage_Laptop from './Sidebar Pages(Laptop)/ReelPage_Laptop';
+import ReelPage_Mobile from './Sidebar Pages(Laptop)/ReelPage_Mobile';
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
     authDomain: "vistafeedd.firebaseapp.com",
@@ -52,6 +54,12 @@ export default function Reels_Page() {
         <div className="jnfvnkf" style={{ color: "white" }}>
           <Sidebar_reels_mobile />
         </div>
+        <div className="jnnf">
+                <ReelPage_Laptop />
+            </div>
+            <div className="jnnfe">
+                <ReelPage_Mobile />
+            </div>
         </div>
     )
 }
