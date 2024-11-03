@@ -373,6 +373,23 @@
   height: 100px;
   background-color: white;
 }
+.dnvjfnv{
+  display: flex;
+  width: 81.5vw;
+  height: 93vh;
+  color: white;
+  /* background-color: white; */
+  justify-content: start;
+  align-items: center;
+  margin-top: 35px;
+  flex-direction: column;
+}
+.jmnnvkr{
+  height: 90vh;
+  width: 350px;
+  /* background-color: white; */
+  border-radius: 10px;
+}
 @media  screen and (max-width: 1023px) {
   .jdnvnmvnd{
     display: none;
