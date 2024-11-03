@@ -11,55 +11,57 @@ import Sidebar_Reels from '../Components/Sidebar_reels';
 import Sidebar_reels_mobile from '../Components_mobile/Sidebar_reels_mobile';
 import ReelPage_Laptop from './Sidebar Pages(Laptop)/ReelPage_Laptop';
 import ReelPage_Mobile from './Sidebar Pages(Laptop)/ReelPage_Mobile';
+import Profilepage_laptop from './Sidebar Pages(Laptop)/profilepage_laptop';
+import ProfilePage_Mobile from './Sidebar Pages(Laptop)/ProfilePage_Mobile';
 const firebaseConfig = {
-    apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
-    authDomain: "vistafeedd.firebaseapp.com",
-    projectId: "vistafeedd",
-    storageBucket: "vistafeedd.appspot.com",
-    messagingSenderId: "1025680611513",
-    appId: "1:1025680611513:web:40aeb5d0434d67ca1ea368",
-    measurementId: "G-9V0M9VQDGM"
-  };
-  
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
+  authDomain: "vistafeedd.firebaseapp.com",
+  projectId: "vistafeedd",
+  storageBucket: "vistafeedd.appspot.com",
+  messagingSenderId: "1025680611513",
+  appId: "1:1025680611513:web:40aeb5d0434d67ca1ea368",
+  measurementId: "G-9V0M9VQDGM"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
 export default function Reels_Page() {
-    useEffect(() => {
-        const checkloggedin = async () => {
-          onAuthStateChanged(auth, (user) => {
-            if (user) {
-            //   window.location.replace('/home');
-              const uid = user.uid;
-              // ...
-            } else {
-              // User is signed out
-              window.location.replace('/');
-              // ...
-            }
-          });
+  useEffect(() => {
+    const checkloggedin = async () => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          //   window.location.replace('/home');
+          const uid = user.uid;
+          // ...
+        } else {
+          // User is signed out
+          window.location.replace('/');
+          // ...
         }
-        checkloggedin();
-      })
-    useEffect(() => {
-        document.title = "VistaFeedd"
-    })
-    return (
-        <div className='webbody' style={{ backgroundColor: 'black', display: 'flex', flexDirection: 'row' }}>
-           <div className="jjndv">
-          <Sidebar_Reels />
-        </div>
-        <div className="jnfvnkf" style={{ color: "white" }}>
-          <Sidebar_reels_mobile />
-        </div>
-        <div className="jnnf">
-                <ReelPage_Laptop />
-            </div>
-            <div className="jnnfe">
-                <ReelPage_Mobile />
-            </div>
-        </div>
-    )
+      });
+    }
+    checkloggedin();
+  })
+  useEffect(() => {
+    document.title = "VistaFeedd"
+  })
+  return (
+    <div className='webbody' style={{ backgroundColor: 'black', display: 'flex', flexDirection: 'row' }}>
+      <div className="jjndv">
+        <Sidebar_Reels />
+      </div>
+      <div className="jnfvnkf" style={{ color: "white" }}>
+        <Sidebar_reels_mobile />
+      </div>
+      <div className="jnnf">
+        <ReelPage_Laptop />
+      </div>
+      <div className="jnnfe">
+        <ReelPage_Mobile />
+      </div>
+    </div>
+  )
 }
