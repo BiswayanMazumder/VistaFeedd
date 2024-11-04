@@ -25,12 +25,15 @@ export default function ExplorePage_laptop() {
   const [posts, setPosts] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [uploaduid,setuploaduid]=useState([]);
   const [tabOpened, setTabOpened] = useState('POSTS');
-
+  const [privateprofile, setPrivateprofile] = useState([]);
   useEffect(() => {
     const fetchPosts = async () => {
       const uid = auth.currentUser?.uid;
       const postids=[]
+      const uploadUIDS=[];
+      const profstatus=[];
       if (uid) {
         const docsnap = doc(db, "Global Post IDs", 'Posts');
         const snapshot = await getDoc(docsnap);
@@ -40,11 +43,19 @@ export default function ExplorePage_laptop() {
             const postRef = doc(db, "Global Post", postId);
             const postSnap = await getDoc(postRef);
             postids.push(postSnap.data()['postid'])
+            uploadUIDS.push(postSnap.data()['Uploaded UID'])
             return postSnap.data()['Image Link'] ;
           }));
-          console.log(postids)
+          // console.log(uploadUIDS)
           setPosts(postids);
           setPostImages(images.filter(Boolean));
+          for(let i = 0; i <uploadUIDS.length; i++) {
+            const postRef = doc(db, "User Details", uploadUIDS[i]);
+            const postSnap = await getDoc(postRef);
+            profstatus.push(postSnap.data()['Private Account']||false)
+          }
+          setPrivateprofile(profstatus)
+          // console.log(profstatus)
         }
       }
     };
@@ -58,7 +69,9 @@ export default function ExplorePage_laptop() {
       {postImages.map((image, index) => (
         <Link key={index} to={`/post/${posts[index]}`}>
           <div style={{ margin: '5px' }}>
-            <img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px',marginRight:"10px" }} />
+            {
+              privateprofile[index]?<></>:<img src={image} alt="" height={"308px"} width={"308px"} style={{ borderRadius: '10px',marginRight:"10px" }} />
+            }
           </div>
         </Link>
       ))}
