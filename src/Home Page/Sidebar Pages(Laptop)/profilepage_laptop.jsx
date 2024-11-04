@@ -151,7 +151,7 @@ const Profilepage_laptop = () => {
                 <div className="krmfvm">
                     <div className="mdnvmn" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
                         <div className="ddvbnd">{name}</div>
-                        <Link style={{ textDecoration: 'none', color: "white" }}>
+                        <Link style={{ textDecoration: 'none', color: "white" }} to={'/account/edit'}>
                             <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "grey", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
                                 Edit Profile
                             </div>

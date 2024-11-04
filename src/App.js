@@ -15,6 +15,7 @@ import Profile_Page from './Home Page/Profile_Page';
 import { Analytics } from "@vercel/analytics/react"
 import OtherProfile from './Home Page/Sidebar Pages(Laptop)/OtherProfile';
 import Postviewing_laptop from './Post Pages/postviewing_laptop';
+import EditProfile from './Home Page/EditProfile';
 function App() {
   // console.log('ENV',process.env.REACT_APP_FIREBASE_STORAGE_BUCKET);
   return (
@@ -50,6 +51,9 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/post/:PostID" element={<Postviewing_laptop />} />
+      </Routes>
+      <Routes>
+        <Route path="/account/edit" element={<EditProfile />} />
       </Routes>
       <Analytics />
     </BrowserRouter>
