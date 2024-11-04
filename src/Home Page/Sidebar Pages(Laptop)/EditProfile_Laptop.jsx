@@ -84,7 +84,7 @@ export default function EditProfile_Laptop() {
             const reader = new FileReader();
             reader.onloadend = async () => {
                 const base64Image = reader.result; // Get base64 string of the image
-                
+
                 // Create a storage reference
                 const storageRef = ref(storage, `profilePictures/${auth.currentUser.uid}`);
 
@@ -115,30 +115,53 @@ export default function EditProfile_Laptop() {
             <div className="mnvmv">
                 <div className="rjhgjrg">
                     <div className="rjrnmrg">
-                        <img 
-                            src={profilePicture} 
-                            alt="" 
-                            height={"80px"} 
-                            width={"80px"} 
-                            style={{ borderRadius: "50%" }} 
+                        <img
+                            src={profilePicture}
+                            alt=""
+                            height={"80px"}
+                            width={"80px"}
+                            style={{ borderRadius: "50%" }}
                         />
                     </div>
                     <h3>{name}</h3>
                 </div>
-                <div 
-                    className="njfjf" 
-                    style={{ textDecoration: 'none', color: "white", cursor: 'pointer' }} 
+                <div
+                    className="njfjf"
+                    style={{ textDecoration: 'none', color: "white", cursor: 'pointer' }}
                     onClick={handleChangePhoto}
                 >
                     Change Photo
                 </div>
-                <input 
-                    id="fileInput" 
-                    type="file" 
-                    accept="image/*" 
-                    style={{ display: 'none' }} 
-                    onChange={handleFileChange} 
+                <input
+                    id="fileInput"
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
                 />
+            </div>
+            <div className="rfmn">
+                Bio
+            </div>
+            <div className="ejfefn">
+                <input
+                    type="text"
+                    value={bio}
+                    className='enbfemnf'
+                    onChange={(e) => setBio(e.target.value)} // Corrected here
+                />
+
+            </div>
+            <div
+                className="mddnfmn"
+                style={{ textDecoration: 'none', color: "white", cursor: 'pointer' }}
+                onClick={async () => {
+                    await updateDoc(doc(db, "User Details", auth.currentUser.uid), {
+                        'Bio': bio
+                    });
+                }}
+            >
+                Submit Bio
             </div>
         </div>
     );
