@@ -24,7 +24,8 @@ const db = getFirestore(app);
 export default function EditProfile_Laptop() {
     useEffect(() => {
         document.title = 'Edit profile • VistaFeedd';
-    })
+    }, []);
+
     const [profilePicture, setProfilePicture] = useState('');
     const [name, setName] = useState('');
     const [bio, setBio] = useState('No bio set');
@@ -43,12 +44,11 @@ export default function EditProfile_Laptop() {
                 fetchFollowers(user.uid);
                 fetchFollowing(user.uid);
             } else {
-                // Handle user not logged in
                 console.log("User not logged in");
             }
         });
 
-        return () => unsubscribe(); // Cleanup subscription on unmount
+        return () => unsubscribe();
     }, []);
 
     const fetchUserData = async (uid) => {
@@ -76,18 +76,17 @@ export default function EditProfile_Laptop() {
                 if (postSnap.exists()) {
                     const postData = postSnap.data();
                     if (postData['Uploaded UID'] === uid) {
-                        postIds.push(postData['postid']); // Store the postid
+                        postIds.push(postData['postid']);
                         return postData['Image Link'];
                     }
                 }
-                return null; // If post doesn't exist or UID doesn't match
+                return null;
             }));
 
-            setPosts(postIds); // Set the post IDs to state
-            setPostImages(images.filter(Boolean)); // Filter out null values
+            setPosts(postIds);
+            setPostImages(images.filter(Boolean));
         }
     };
-
 
     const fetchFollowers = async (uid) => {
         const docSnap = await getDoc(doc(db, 'Followers', uid));
@@ -106,6 +105,7 @@ export default function EditProfile_Laptop() {
     useEffect(() => {
         document.title = `${name} - VistaFeedd`;
     }, [name]);
+
     const [saved, setsaved] = useState([]);
     const [savedimage, setsavedimage] = useState([]);
     const [savedpost, setsavedpost] = useState([]);
@@ -113,20 +113,17 @@ export default function EditProfile_Laptop() {
         const uid = auth.currentUser.uid;
         const docsnap = doc(db, "Saved Posts", uid);
         const snapshot = await getDoc(docsnap);
-        const saveddata = []; // Array to hold post ID
+        const saveddata = [];
         const savedimages = [];
-        const savedpostid = []
+        const savedpostid = [];
         if (snapshot.exists()) {
             const savedposts = snapshot.data()['POST IDs'] || [];
-            // Push each ID individually to saveddata
-            saveddata.push(...savedposts); // Spread operator to flatten
+            saveddata.push(...savedposts);
             setsaved(savedposts);
         }
 
-        // console.log(`Saved`, saveddata); 
-
         for (let i = 0; i < saveddata.length; i++) {
-            const postRef = doc(db, "Global Post", saveddata[i]); // Use saveddata[i] directly
+            const postRef = doc(db, "Global Post", saveddata[i]);
             const postSnap = await getDoc(postRef);
 
             if (postSnap.exists()) {
@@ -134,7 +131,6 @@ export default function EditProfile_Laptop() {
                 savedpostid.push(postData['postid']);
                 savedimages.push(postData['Image Link']);
             }
-            // console.log('Images',savedimages);
         }
         setsavedpost(savedpostid);
         setsavedimage(savedimages);
@@ -143,21 +139,53 @@ export default function EditProfile_Laptop() {
     useEffect(() => {
         fetchsaved();
     }, []);
+
+    const handleChangePhoto = () => {
+        document.getElementById('fileInput').click();
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                // Update profile picture state
+                setProfilePicture(reader.result); // Set the new profile picture
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <div className="jdnvnmvnd" style={{ color: "white", overflow: "hidden" }}>
             <div className="mnvmv">
                 <div className="rjhgjrg">
                     <div className="rjrnmrg">
-                        <img src={profilePicture} alt="" height={"80px"} width={"80px"} style={{ borderRadius: "50%" }} />
+                        <img 
+                            src={profilePicture} 
+                            alt="" 
+                            height={"80px"} 
+                            width={"80px"} 
+                            style={{ borderRadius: "50%" }} 
+                        />
                     </div>
                     <h3>{name}</h3>
                 </div>
-                <Link style={{ textDecoration: 'none', color: "white" }}>
-                    <div className="njfjf">
-                        Change Photo
-                    </div>
-                </Link>
+                <div 
+                    className="njfjf" 
+                    style={{ textDecoration: 'none', color: "white", cursor: 'pointer' }} 
+                    onClick={handleChangePhoto}
+                >
+                    Change Photo
+                </div>
+                <input 
+                    id="fileInput" 
+                    type="file" 
+                    accept="image/*" 
+                    style={{ display: 'none' }} 
+                    onChange={handleFileChange} 
+                />
             </div>
         </div>
-    )
+    );
 }
