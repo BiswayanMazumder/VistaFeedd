@@ -180,7 +180,7 @@ export default function HomePage_Laptop() {
                                     <div style={{ color: 'grey', fontWeight: '300' }}>{formatTimeAgo(uploaddates[index])}</div>
                                 </div>
                             </div>
-                            <div className="jefjn" style={{ marginTop: '30px' }}>
+                            <div className="jefjn" style={{ marginTop: '30px' }} onDoubleClick={() => handleLikeToggle(index)}>
                                 <img src={image} alt="" height={'500px'} width={'500px'} style={{ borderRadius: '10px' }} />
                             </div>
                             <div className="jefjnkrjg" style={{ display: 'flex', justifyContent: 'start', flexDirection: 'row', gap: '20px', marginTop: '10px' }}>
