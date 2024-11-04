@@ -133,7 +133,7 @@ const OthersProfile_Laptop = () => {
                     <div className="mdnvmn" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
                         <div className="ddvbnd">{name}</div>
                         {
-                            auth.currentUser?<Link style={{ textDecoration: 'none', color: "white" }}>
+                            auth.currentUser?<Link style={{ textDecoration: 'none', color: "white" }} to={auth.currentUser.uid===otheruserid?'/account/edit':null}>
                             <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: auth.currentUser.uid===otheruserid?"gray":followed?"gray":"#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }} onClick={async()=>{
                                 if(auth.currentUser.uid!=otheruserid){
                                     if(!followed){

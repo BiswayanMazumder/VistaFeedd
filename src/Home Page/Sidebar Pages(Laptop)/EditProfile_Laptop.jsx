@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { doc, getDoc, getFirestore } from '@firebase/firestore';
+import { doc, getDoc, getFirestore, updateDoc } from '@firebase/firestore';
+import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
@@ -20,6 +21,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 export default function EditProfile_Laptop() {
     useEffect(() => {
@@ -30,17 +32,13 @@ export default function EditProfile_Laptop() {
     const [name, setName] = useState('');
     const [bio, setBio] = useState('No bio set');
     const [posts, setPosts] = useState([]);
-    const [postImages, setPostImages] = useState([]);
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
-    const [tabOpened, setTabOpened] = useState('POSTS');
-    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 fetchUserData(user.uid);
-                fetchPosts(user.uid);
                 fetchFollowers(user.uid);
                 fetchFollowing(user.uid);
             } else {
@@ -62,32 +60,6 @@ export default function EditProfile_Laptop() {
         }
     };
 
-    const fetchPosts = async (uid) => {
-        const postIds = [];
-        const docsnap = doc(db, "Global Post IDs", 'Posts');
-        const snapshot = await getDoc(docsnap);
-
-        if (snapshot.exists()) {
-            const ids = snapshot.data()['Post IDs'] || [];
-            const images = await Promise.all(ids.map(async (postId) => {
-                const postRef = doc(db, "Global Post", postId);
-                const postSnap = await getDoc(postRef);
-
-                if (postSnap.exists()) {
-                    const postData = postSnap.data();
-                    if (postData['Uploaded UID'] === uid) {
-                        postIds.push(postData['postid']);
-                        return postData['Image Link'];
-                    }
-                }
-                return null;
-            }));
-
-            setPosts(postIds);
-            setPostImages(images.filter(Boolean));
-        }
-    };
-
     const fetchFollowers = async (uid) => {
         const docSnap = await getDoc(doc(db, 'Followers', uid));
         if (docSnap.exists()) {
@@ -102,55 +74,37 @@ export default function EditProfile_Laptop() {
         }
     };
 
-    useEffect(() => {
-        document.title = `${name} - VistaFeedd`;
-    }, [name]);
-
-    const [saved, setsaved] = useState([]);
-    const [savedimage, setsavedimage] = useState([]);
-    const [savedpost, setsavedpost] = useState([]);
-    const fetchsaved = async () => {
-        const uid = auth.currentUser.uid;
-        const docsnap = doc(db, "Saved Posts", uid);
-        const snapshot = await getDoc(docsnap);
-        const saveddata = [];
-        const savedimages = [];
-        const savedpostid = [];
-        if (snapshot.exists()) {
-            const savedposts = snapshot.data()['POST IDs'] || [];
-            saveddata.push(...savedposts);
-            setsaved(savedposts);
-        }
-
-        for (let i = 0; i < saveddata.length; i++) {
-            const postRef = doc(db, "Global Post", saveddata[i]);
-            const postSnap = await getDoc(postRef);
-
-            if (postSnap.exists()) {
-                const postData = postSnap.data();
-                savedpostid.push(postData['postid']);
-                savedimages.push(postData['Image Link']);
-            }
-        }
-        setsavedpost(savedpostid);
-        setsavedimage(savedimages);
-    };
-
-    useEffect(() => {
-        fetchsaved();
-    }, []);
-
     const handleChangePhoto = () => {
         document.getElementById('fileInput').click();
     };
 
-    const handleFileChange = (event) => {
+    const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
-                // Update profile picture state
-                setProfilePicture(reader.result); // Set the new profile picture
+            reader.onloadend = async () => {
+                const base64Image = reader.result; // Get base64 string of the image
+                
+                // Create a storage reference
+                const storageRef = ref(storage, `profilePictures/${auth.currentUser.uid}`);
+
+                try {
+                    // Upload the image
+                    await uploadString(storageRef, base64Image, 'data_url');
+
+                    // Get the download URL
+                    const downloadURL = await getDownloadURL(storageRef);
+
+                    // Update the Firestore document
+                    await updateDoc(doc(db, "User Details", auth.currentUser.uid), {
+                        'Profile Pic': downloadURL
+                    });
+
+                    // Update the local state to reflect the new profile picture
+                    setProfilePicture(downloadURL);
+                } catch (error) {
+                    console.error("Error uploading file:", error);
+                }
             };
             reader.readAsDataURL(file);
         }
