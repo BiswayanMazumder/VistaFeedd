@@ -48,7 +48,7 @@ export default function EditProfile_Laptop() {
 
         return () => unsubscribe();
     }, []);
-
+    const [isToggled, setIsToggled] = useState(false);
     const fetchUserData = async (uid) => {
         const docRef = doc(db, "User Details", uid);
         const docSnap = await getDoc(docRef);
@@ -56,6 +56,7 @@ export default function EditProfile_Laptop() {
             const data = docSnap.data();
             setProfilePicture(data['Profile Pic']);
             setName(data['Name']);
+            setIsToggled(data['Private Account']|| false);
             setBio(data['Bio'] || 'No bio set');
         }
     };
@@ -109,7 +110,25 @@ export default function EditProfile_Laptop() {
             reader.readAsDataURL(file);
         }
     };
+    
 
+    const handleToggle = async() => {
+        if(isToggled){
+            setIsToggled(false);
+            const docref=doc(db, "User Details", auth.currentUser.uid);
+            await updateDoc(docref, {
+                'Private Account': false
+            });
+        }
+        else{
+            setIsToggled(true);
+            const docref=doc(db, "User Details", auth.currentUser.uid);
+            await updateDoc(docref, {
+                'Private Account': true
+            });
+        }
+        console.log('Toggled',isToggled);
+    };
     return (
         <div className="jdnvnmvnd" style={{ color: "white", overflow: "hidden" }}>
             <div className="mnvmv">
@@ -162,6 +181,22 @@ export default function EditProfile_Laptop() {
                 }}
             >
                 Submit Bio
+            </div>
+            <div className="kdjggjg">
+                <div className="jevnv">
+                    <div className="mfnvmnfv">
+                    Private account
+                    </div>
+                    <div className="emvnv">
+                    When your account is public, your profile and posts can be seen by anyone, on or off VistaFeedd, even if they don't have an VistaFeedd account.
+                    When your account is private, only the followers you approve can see what you share, including your photos or videos on hashtag and location pages, and your followers and following lists. Certain info on your profile, like your profile picture and username, is visible to everyone on and off VistaFeedd
+                    </div>
+                </div>
+                <div className="jnfjn">
+                <div className="toggle-container" onClick={handleToggle}>
+            <div className={`toggle-slider ${isToggled ? 'active' : ''}`} ></div>
+        </div>
+                </div>
             </div>
         </div>
     );

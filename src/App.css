@@ -493,12 +493,12 @@
   position: absolute;
   right: 0;
   margin-top: 20px;
-  margin-right: 100px;
+  margin-right: 68px;
 }
 .ejfefn{
   margin-top: 20px;
   height: 85px;
-  width: 70vw;
+  width: 72.5vw;
   border: 1px solid grey;
   margin-left: 80px;
   border-radius: 10px;
@@ -521,8 +521,77 @@ margin-left: 85px;
 margin-top: 30px;
 font-weight: bold;
 font-size:17px;
-
 }
+.kdjggjg{
+  height: 180px;
+  width: 72vw;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid gray;
+  margin-top: 120px;
+  margin-left: 80px;
+  border-radius: 10px;
+  color: white;
+}
+.jnfjn{
+  width: 20%;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.jevnv{
+  width: 80%;
+  height: 180px;
+  border-radius: 10px;
+  /* background-color: white; */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 20px;
+}
+.mfnvmnfv{
+  font-size: 18px;
+  font-weight: 600;
+}
+.emvnv{
+  font-size: 15px;
+  font-weight: 500;
+  color: gray;
+}
+/* src/ToggleSlider.css */
+.toggle-container {
+  width: 50px;
+  height: 20px;
+  background-color: #ccc; /* Grey when off */
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-slider {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.toggle-slider.active {
+  transform: translateX(30px);
+}
+
+.toggle-container.active {
+  background-color: white; /* White when on */
+}
+
+.toggle-container:not(.active) {
+  background-color: #ccc; /* Grey when off */
+}
+
 @media  screen and (max-width: 1023px) {
   .jdnvnmvnd{
     display: none;
