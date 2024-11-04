@@ -72,7 +72,7 @@ export default function EditProfile() {
                 <EditProfile_Laptop />
             </div>
             <div className="jnnfe">
-                <ProfilePage_Mobile />
+                {/* <ProfilePage_Mobile /> */}
             </div>
         </div>
     )
