@@ -48,7 +48,7 @@ export default function EditProfile_Laptop() {
 
         return () => unsubscribe();
     }, []);
-    const [isToggled, setIsToggled] = useState(false);
+    const [isToggled, setIsToggled] = useState(false); 
     const fetchUserData = async (uid) => {
         const docRef = doc(db, "User Details", uid);
         const docSnap = await getDoc(docRef);
