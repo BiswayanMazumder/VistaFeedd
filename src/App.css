@@ -490,7 +490,9 @@
   justify-content: center;
   align-items: center;
   font-weight: 600;
-  position: absolute;
+  position: relative;
+  top: 20px;
+  left: 70vw;
   right: 0;
   margin-top: 20px;
   margin-right: 68px;
@@ -528,7 +530,7 @@ font-size:17px;
   display: flex;
   flex-direction: row;
   border: 1px solid gray;
-  margin-top: 120px;
+  margin-top: 80px;
   margin-left: 80px;
   border-radius: 10px;
   color: white;
@@ -539,6 +541,9 @@ font-size:17px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.jdnvnmvnd::-webkit-scrollbar{
+  display: none;
 }
 .jevnv{
   width: 80%;

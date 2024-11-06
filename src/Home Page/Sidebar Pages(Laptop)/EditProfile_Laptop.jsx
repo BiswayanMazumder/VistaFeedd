@@ -48,7 +48,10 @@ export default function EditProfile_Laptop() {
 
         return () => unsubscribe();
     }, []);
-    const [isToggled, setIsToggled] = useState(false); 
+
+    const [isToggled, setIsToggled] = useState(false);
+    const [verifiedtoggle, setverification] = useState(false);
+    const [verified,setverified]=useState(false);
     const fetchUserData = async (uid) => {
         const docRef = doc(db, "User Details", uid);
         const docSnap = await getDoc(docRef);
@@ -56,8 +59,10 @@ export default function EditProfile_Laptop() {
             const data = docSnap.data();
             setProfilePicture(data['Profile Pic']);
             setName(data['Name']);
-            setIsToggled(data['Private Account']|| false);
+            setIsToggled(data['Private Account'] || false);
             setBio(data['Bio'] || 'No bio set');
+            setverified(data['Verified'] || false);
+            setverification(data['Applied For Verification'] || false);
         }
     };
 
@@ -110,27 +115,44 @@ export default function EditProfile_Laptop() {
             reader.readAsDataURL(file);
         }
     };
-    
 
-    const handleToggle = async() => {
-        if(isToggled){
+    const handleToggle = async () => {
+        if (isToggled) {
             setIsToggled(false);
-            const docref=doc(db, "User Details", auth.currentUser.uid);
+            const docref = doc(db, "User Details", auth.currentUser.uid);
             await updateDoc(docref, {
                 'Private Account': false
             });
         }
-        else{
+        else {
             setIsToggled(true);
-            const docref=doc(db, "User Details", auth.currentUser.uid);
+            const docref = doc(db, "User Details", auth.currentUser.uid);
             await updateDoc(docref, {
                 'Private Account': true
             });
         }
-        console.log('Toggled',isToggled);
+        console.log('Toggled', isToggled);
     };
+
+    const handleToggleverification = async () => {
+        if(!verifiedtoggle){
+            const docref=doc(db, "User Details", auth.currentUser.uid);
+            await updateDoc(docref, {
+                'Applied For Verification':true
+            })
+            setverification(prevState => !prevState);
+        }
+        if(verifiedtoggle){
+            const docref=doc(db, "User Details", auth.currentUser.uid);
+            await updateDoc(docref, {
+                'Applied For Verification':false
+            })
+            setverification(prevState => !prevState);
+        }
+    };
+    
     return (
-        <div className="jdnvnmvnd" style={{ color: "white", overflow: "hidden" }}>
+        <div className="jdnvnmvnd" style={{ overflowY: "auto", maxHeight: "100vh" }}>
             <div className="mnvmv">
                 <div className="rjhgjrg">
                     <div className="rjrnmrg">
@@ -169,7 +191,6 @@ export default function EditProfile_Laptop() {
                     className='enbfemnf'
                     onChange={(e) => setBio(e.target.value)} // Corrected here
                 />
-
             </div>
             <div
                 className="mddnfmn"
@@ -185,19 +206,34 @@ export default function EditProfile_Laptop() {
             <div className="kdjggjg">
                 <div className="jevnv">
                     <div className="mfnvmnfv">
-                    Private account
+                        Private account
                     </div>
                     <div className="emvnv">
-                    When your account is public, your profile and posts can be seen by anyone, on or off VistaFeedd, even if they don't have an VistaFeedd account.
-                    When your account is private, only the followers you approve can see what you share, including your photos or videos on hashtag and location pages, and your followers and following lists. Certain info on your profile, like your profile picture and username, is visible to everyone on and off VistaFeedd
+                        When your account is public, your profile and posts can be seen by anyone, on or off VistaFeedd, even if they don't have a VistaFeedd account.
+                        When your account is private, only the followers you approve can see what you share, including your photos or videos on hashtag and location pages, and your followers and following lists. Certain info on your profile, like your profile picture and username, is visible to everyone on and off VistaFeedd
                     </div>
                 </div>
                 <div className="jnfjn">
-                <div className="toggle-container" onClick={handleToggle}>
-            <div className={`toggle-slider ${isToggled ? 'active' : ''}`} ></div>
-        </div>
+                    <div className="toggle-container" onClick={handleToggle}>
+                        <div className={`toggle-slider ${isToggled ? 'active' : ''}`} ></div>
+                    </div>
                 </div>
             </div>
+            {verified?<></>:<div className="kdjggjg">
+                <div className="jevnv">
+                    <div className="mfnvmnfv">
+                        Apply for verification
+                    </div>
+                    <div className="emvnv">
+                        Verified badges indicate that an account has been authenticated based on its activity on the platform and the documents or information provided. This process is typically used for public figures, brands, or notable entities to distinguish them from impersonators or fake accounts. Verification often requires submitting official records or documentation to confirm identity. Once verified, the account receives a badge, signaling its authenticity to users. This helps build trust and ensures that users can easily recognize legitimate accounts on the platform.
+                    </div>
+                </div>
+                <div className="jnfjn">
+                    <div className="toggle-container" onClick={handleToggleverification}>
+                        <div className={`toggle-slider ${verifiedtoggle ? 'active' : ''}`} ></div>
+                    </div>
+                </div>
+            </div>}
         </div>
     );
 }
