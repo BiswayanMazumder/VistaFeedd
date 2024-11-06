@@ -138,7 +138,8 @@ export default function EditProfile_Laptop() {
         if(!verifiedtoggle){
             const docref=doc(db, "User Details", auth.currentUser.uid);
             await updateDoc(docref, {
-                'Applied For Verification':true
+                'Applied For Verification':true,
+                'Verified':false
             })
             setverification(prevState => !prevState);
         }
