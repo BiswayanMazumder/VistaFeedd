@@ -545,6 +545,11 @@ font-size:17px;
 .jdnvnmvnd::-webkit-scrollbar{
   display: none;
 }
+.jdjkfj{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
 .jevnv{
   width: 80%;
   height: 180px;

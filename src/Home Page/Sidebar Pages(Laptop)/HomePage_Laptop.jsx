@@ -50,12 +50,13 @@ export default function HomePage_Laptop() {
         return () => unsubscribe();
     }, []);
     const [likedname, setlikedname] = useState([]);
+    const [verified, setverified] = useState([]);
     const fetchPosts = async (userId) => {
-        const Following=[];
-        const docSnap=doc(db,'Following',userId);
-        const followingSnap=await getDoc(docSnap);
-        if(followingSnap.exists()){
-            Following.push(...followingSnap.data()['Following ID']||[]);
+        const Following = [];
+        const docSnap = doc(db, 'Following', userId);
+        const followingSnap = await getDoc(docSnap);
+        if (followingSnap.exists()) {
+            Following.push(...followingSnap.data()['Following ID'] || []);
         }
         // console.log('Following',Following); 
         const docsnap = doc(db, "Global Post IDs", 'Posts');
@@ -101,6 +102,7 @@ export default function HomePage_Laptop() {
     };
 
     const fetchUserDetails = async (uids) => {
+        const Verif=[];
         for (const uid of uids) {
             const docsnap = doc(db, "User Details", uid);
             const snapshot = await getDoc(docsnap);
@@ -108,8 +110,13 @@ export default function HomePage_Laptop() {
                 const userData = snapshot.data();
                 setUploadernames(prevNames => [...prevNames, userData['Name']]);
                 setUploaderpfps(prevPfps => [...prevPfps, userData['Profile Pic']]);
+                Verif.push(userData['Verified']||false);
+                // setverified(prevVer => [...prevVer, userData['Verified']]);
             }
         }
+        
+        setverified(Verif);
+        console.log('Verif',verified);
     };
 
     const handleLikeToggle = async (index) => {
@@ -171,11 +178,19 @@ export default function HomePage_Laptop() {
                             <div className="jdjvnfv" style={{ height: '40px', width: '40px', borderRadius: '50%' }}>
                                 <img src={uploaderpfps[index]} alt="" height={40} width={40} style={{ borderRadius: '50%' }} />
                                 <div style={{ marginTop: '15px', whiteSpace: 'nowrap', overflow: 'visible', textOverflow: 'ellipsis', maxWidth: '120px', fontSize: '14px', display: 'flex', justifyContent: 'start', flexDirection: 'row', gap: '5px' }} className='enjfendf'>
-                                <Link style={{ textDecoration: 'none', color: 'white' }} to={`/others/${uploadeduid[index]}`}>
-                            <div onClick={()=>{
-                                localStorage.setItem('clickeduid', uploadeduid[index]);
-                            }}>{uploadernames[index]}</div>
-                            </Link>
+                                    <Link style={{ textDecoration: 'none', color: 'white' }} to={`/others/${uploadeduid[index]}`}>
+                                        <div className='jdjkfj' onClick={() => {
+                                            localStorage.setItem('clickeduid', uploadeduid[index]);
+                                        }}>{uploadernames[index]}
+                                            
+                                                <div style={{ marginTop: "2px" }}>
+                                                    {
+                                                        verified[index]?<svg aria-label="Verified" class="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img" viewBox="0 0 40 40" width="12"><title>Verified</title><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fill-rule="evenodd"></path></svg>:<></>
+                                                    }
+                                                </div>
+                                            
+                                        </div>
+                                    </Link>
                                     <div style={{ color: 'grey' }}>•</div>
                                     <div style={{ color: 'grey', fontWeight: '300' }}>{formatTimeAgo(uploaddates[index])}</div>
                                 </div>
