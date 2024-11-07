@@ -173,7 +173,7 @@ export default function ProfilePage_Mobile() {
                 <div>{followers.length} {followers.length === 1 || followers.length === 0 ? 'Follower' : 'Followers'}</div>
                 <div>{following.length} Following</div>
             </div>
-            <div className="tab-navigation" style={{ marginTop: "20px", display: "flex",flexDirection: "row", width: "100%", justifyContent: "space-evenly", alignItems: "center" }}>
+            <div className="tab-navigation" style={{ marginTop: "20px", display: "flex",flexDirection: "row", width: "100vw", justifyContent: "space-evenly", alignItems: "center" }}>
                 <div onClick={() => settabopened('POSTS')} style={{ cursor: "pointer", color: tabopened === 'POSTS' ? "blue" : "white" }}>
                     <svg aria-label="" fill="currentColor" height="12" viewBox="0 0 24 24" width="12">
                         <rect fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" width="18" x="3" y="3"></rect>
