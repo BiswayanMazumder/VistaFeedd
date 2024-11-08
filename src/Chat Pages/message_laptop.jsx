@@ -22,8 +22,7 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export default function Chatpage_laptop() {
-    const { ChatID } = useParams();
+export default function Message_laptop() {
     const [chatUID, setchatUID] = useState('');
     const [pfp, setpfp] = useState('');
     const [name, setname] = useState('');
@@ -89,21 +88,7 @@ export default function Chatpage_laptop() {
         setotherchatuid(uids);
     };
 
-    const fetchchatdetails = async () => {
-        const uids=[]
-        const docref = doc(db, 'Chat Details', ChatID);
-        const docSnap = await getDoc(docref);
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            const UID1 = data['User 1'];
-            const UID2 = data['User 2'];
-            uids.push(UID1 === auth.currentUser.uid ? UID2 : UID1);
-            // console.log('UID',uids)
-            setchatUID(UID1 === auth.currentUser.uid ? UID2 : UID1);
-        } else {
-            console.error('Chat details not found');
-        }
-    };
+
 
     // Function to fetch chat owner details
     const fetchchatownerdetails = async () => {
@@ -124,11 +109,7 @@ export default function Chatpage_laptop() {
             if (user) {
                 // Fetch chat and user details after user is authenticated
                 fetchallchatids();
-                fetchchatdetails()
-                    .then(() => {
-                        fetchchatownerdetails();
-                    })
-                    .finally(() => setLoading(false)); // Set loading to false after fetching data
+
             } else {
                 console.log("User not logged in");
                 setLoading(false);
@@ -136,9 +117,7 @@ export default function Chatpage_laptop() {
         });
 
         return () => unsubscribe(); // Cleanup on unmount
-    }, [ChatID, chatUID]); // Dependencies include ChatID and chatUID to refetch when these change
-
-   
+    }, [chatUID]); // Dependencies include ChatID and chatUID to refetch when these change
 
     return (
         <div className="jndvnfnf" style={{ overflowY: "auto", maxHeight: "100vh", display: "flex", flexDirection: "row", marginTop: "0px", marginLeft: "0px", width: "100%", gap: "0px" }}>
@@ -148,30 +127,25 @@ export default function Chatpage_laptop() {
                         <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
                             <div className="wwkdwkdm">
                                 <img src={otherchatpfp[index]} alt={name} style={{ width: "44px", height: "44px", borderRadius: "50%" }} />
-                            </div> 
+                            </div>
                         </Link>
                         <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
                             <div className="kkmf" style={{ color: 'white', fontWeight: '400' }}>
-                                {name} 
+                                {name}
                             </div>
                         </Link>
                     </div>
                 ))}
             </div>
-            <div className="mdnfmd">
-                <div className="jnefjnedf">
-                    <Link style={{ textDecoration: 'none', color: 'white' }} to={`/others/${chatUID}`}>
-                        <div className="wwkdwkdm">
-                            <img src={pfp} alt={name} style={{ width: "44px", height: "44px", borderRadius: "50%" }} />
-                        </div>
-                    </Link>
-                    <Link style={{ textDecoration: 'none', color: 'white' }} to={`/others/${chatUID}`}>
-                        <div className="kkmf">
-                            {name}
-                        </div>
-                    </Link>
+            {/* <div className="mdnfmd" style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: "10px" }}>
+                <svg aria-label="" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="96" role="img" viewBox="0 0 96 96" width="96"><title></title><path d="M48 0C21.532 0 0 21.533 0 48s21.532 48 48 48 48-21.532 48-48S74.468 0 48 0Zm0 94C22.636 94 2 73.364 2 48S22.636 2 48 2s46 20.636 46 46-20.636 46-46 46Zm12.227-53.284-7.257 5.507c-.49.37-1.166.375-1.661.005l-5.373-4.031a3.453 3.453 0 0 0-4.989.921l-6.756 10.718c-.653 1.027.615 2.189 1.582 1.453l7.257-5.507a1.382 1.382 0 0 1 1.661-.005l5.373 4.031a3.453 3.453 0 0 0 4.989-.92l6.756-10.719c.653-1.027-.615-2.189-1.582-1.453ZM48 25c-12.958 0-23 9.492-23 22.31 0 6.706 2.749 12.5 7.224 16.503.375.338.602.806.62 1.31l.125 4.091a1.845 1.845 0 0 0 2.582 1.629l4.563-2.013a1.844 1.844 0 0 1 1.227-.093c2.096.579 4.331.884 6.659.884 12.958 0 23-9.491 23-22.31S60.958 25 48 25Zm0 42.621c-2.114 0-4.175-.273-6.133-.813a3.834 3.834 0 0 0-2.56.192l-4.346 1.917-.118-3.867a3.833 3.833 0 0 0-1.286-2.727C29.33 58.54 27 53.209 27 47.31 27 35.73 36.028 27 48 27s21 8.73 21 20.31-9.028 20.31-21 20.31Z"></path></svg>
+                <div style={{ fontWeight: "600", color: "white" }}>
+                    Your messages
                 </div>
-            </div>
+                <div style={{ fontWeight: "400", color: "gray", fontSize: "14px" }}>
+                    Send a message to start a chat.
+                </div>
+            </div> */}
         </div>
-    );
+    )
 }

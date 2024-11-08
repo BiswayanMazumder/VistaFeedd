@@ -22,8 +22,7 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export default function Chatpage_laptop() {
-    const { ChatID } = useParams();
+export default function Message_Mobile() {
     const [chatUID, setchatUID] = useState('');
     const [pfp, setpfp] = useState('');
     const [name, setname] = useState('');
@@ -89,21 +88,7 @@ export default function Chatpage_laptop() {
         setotherchatuid(uids);
     };
 
-    const fetchchatdetails = async () => {
-        const uids=[]
-        const docref = doc(db, 'Chat Details', ChatID);
-        const docSnap = await getDoc(docref);
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            const UID1 = data['User 1'];
-            const UID2 = data['User 2'];
-            uids.push(UID1 === auth.currentUser.uid ? UID2 : UID1);
-            // console.log('UID',uids)
-            setchatUID(UID1 === auth.currentUser.uid ? UID2 : UID1);
-        } else {
-            console.error('Chat details not found');
-        }
-    };
+
 
     // Function to fetch chat owner details
     const fetchchatownerdetails = async () => {
@@ -124,11 +109,7 @@ export default function Chatpage_laptop() {
             if (user) {
                 // Fetch chat and user details after user is authenticated
                 fetchallchatids();
-                fetchchatdetails()
-                    .then(() => {
-                        fetchchatownerdetails();
-                    })
-                    .finally(() => setLoading(false)); // Set loading to false after fetching data
+
             } else {
                 console.log("User not logged in");
                 setLoading(false);
@@ -136,42 +117,29 @@ export default function Chatpage_laptop() {
         });
 
         return () => unsubscribe(); // Cleanup on unmount
-    }, [ChatID, chatUID]); // Dependencies include ChatID and chatUID to refetch when these change
-
-   
-
-    return (
-        <div className="jndvnfnf" style={{ overflowY: "auto", maxHeight: "100vh", display: "flex", flexDirection: "row", marginTop: "0px", marginLeft: "0px", width: "100%", gap: "0px" }}>
-            <div className="emnfmdkvm">
-                {otherchatname.map((name, index) => (
-                    <div className="ekfkmv" key={index}>
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
-                            <div className="wwkdwkdm">
-                                <img src={otherchatpfp[index]} alt={name} style={{ width: "44px", height: "44px", borderRadius: "50%" }} />
-                            </div> 
-                        </Link>
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
-                            <div className="kkmf" style={{ color: 'white', fontWeight: '400' }}>
-                                {name} 
-                            </div>
-                        </Link>
-                    </div>
-                ))}
-            </div>
-            <div className="mdnfmd">
-                <div className="jnefjnedf">
-                    <Link style={{ textDecoration: 'none', color: 'white' }} to={`/others/${chatUID}`}>
-                        <div className="wwkdwkdm">
-                            <img src={pfp} alt={name} style={{ width: "44px", height: "44px", borderRadius: "50%" }} />
-                        </div>
-                    </Link>
-                    <Link style={{ textDecoration: 'none', color: 'white' }} to={`/others/${chatUID}`}>
-                        <div className="kkmf">
-                            {name}
-                        </div>
-                    </Link>
-                </div>
-            </div>
+    }, [chatUID]); // Dependencies include ChatID and chatUID to refetch when these change
+    <div className="mdvvdmv">
+        <div className="kdkdmv">
+            <img src={otherchatpfp[0]} alt="" height={'50px'} width={'50px'} style={{ borderRadius: '50%' }}/>
         </div>
-    );
+        {otherchatname[0]}
+      </div>
+  return (
+    <div style={{ color: 'white' }} className='kdmkfmkmk'>
+      {
+        otherchatname.map((name, index) => (
+            <div className='mdvvdmv' key={index}>
+            <Link style={{ textDecoration: 'none',color:"white" }} to={`/others/${otherchatuid[index]}`}>
+            <div className='kdkdmv'>
+                <img src={otherchatpfp[index]} alt="" height={'50px'} width={'50px'} style={{ borderRadius: '50%' }}/>
+            </div>
+            </Link>
+            <Link style={{ textDecoration: 'none',color:"white" }} to={`/others/${otherchatuid[index]}`}>
+            {name}
+            </Link>
+            </div>
+        ))
+      }
+    </div>
+  )
 }
