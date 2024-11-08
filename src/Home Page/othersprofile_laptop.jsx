@@ -161,6 +161,7 @@ const OthersProfile_Laptop = () => {
             };
             await setDoc(chatdet, chatdetdata);
             setchatted(true);
+            window.location.href=`/direct/t/${number}`;
         } catch (error) {
             console.error("Error generating chats:", error);
         }
