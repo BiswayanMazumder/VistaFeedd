@@ -41,6 +41,7 @@ const OthersProfile_Laptop = () => {
                 fetchFollowers(otheruserid);
                 fetchFollowing(otheruserid);
                 fetchuserfollowers(auth.currentUser.uid);
+                fetchchatid();
                 checkchats();
             } else {
                 // Handle user not logged in
@@ -179,7 +180,38 @@ const OthersProfile_Laptop = () => {
             console.error("Error checking chats:", error);
         }
     };
-
+    const [chatID,setChatID]=useState('');
+    const fetchchatid = async () => {
+        await checkchats();
+    
+        const chattedUID = [];
+        const chatID = [];
+        try {
+            const docref = doc(db, 'Chat UIDs', auth.currentUser.uid);
+            const docSnap = await getDoc(docref);
+    
+            if (docSnap.exists()) {
+                const data = docSnap.data();  // Extract the document data
+                chattedUID.push(...data['UIDs']);
+                chatID.push(...data['IDs']);
+                // console.log('chattedUID:', chattedUID);
+                // console.log('chatID:', chatID);
+                // Ensure that 'UIDs' is an array before calling findIndex
+                const indexchat = data['UIDs'].findIndex(uid => uid === otheruserid);
+    
+                if (indexchat !== -1) {
+                    setChatID(chatID[indexchat]);
+                    const Chatted = chatID[indexchat];
+                    // console.log('Chatted:', Chatted);
+                } else {
+                    console.log('User not found in the UIDs array');
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching chat ID:", error);
+        }
+    };
+    
     return (
         <div className="jdnvnmvnd" style={{ color: "white", overflow: "hidden" }}>
             <div className="krkmfkfvm">
@@ -242,7 +274,6 @@ const OthersProfile_Laptop = () => {
                                         await generatechats();
                                     }
                                 }
-                                // await generatechats();
                             }}>
                                 Message
                             </div>
