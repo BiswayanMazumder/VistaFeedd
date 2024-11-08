@@ -202,7 +202,7 @@ export default function OtherProfile_Mobile() {
                 if (indexchat !== -1) {
                     setChatID(chatID[indexchat]);
                     const Chatted = chatID[indexchat];
-                    console.log('Chatted:', Chatted);
+                    // console.log('Chatted:', Chatted);
                 } else {
                     console.log('User not found in the UIDs array');
                 }
