@@ -119,6 +119,8 @@ export default function OtherProfile_Mobile() {
         const loggedin=auth.currentUser;
         if(loggedin){
             fetchuserfollowers(auth.currentUser.uid);
+            fetchchatid();
+            checkchats();
         }
     }, [otheruserid]);
     const [number, setNumber] = useState(0);
@@ -200,7 +202,7 @@ export default function OtherProfile_Mobile() {
                 if (indexchat !== -1) {
                     setChatID(chatID[indexchat]);
                     const Chatted = chatID[indexchat];
-                    // console.log('Chatted:', Chatted);
+                    console.log('Chatted:', Chatted);
                 } else {
                     console.log('User not found in the UIDs array');
                 }
