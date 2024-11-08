@@ -16,6 +16,7 @@ import { Analytics } from "@vercel/analytics/react"
 import OtherProfile from './Home Page/Sidebar Pages(Laptop)/OtherProfile';
 import Postviewing_laptop from './Post Pages/postviewing_laptop';
 import EditProfile from './Home Page/EditProfile';
+import Chatpage from './Chat Pages/chatpage';
 function App() {
   // console.log('ENV',process.env.REACT_APP_FIREBASE_STORAGE_BUCKET);
   return (
@@ -54,6 +55,9 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/account/edit" element={<EditProfile />} />
+      </Routes>
+      <Routes>
+        <Route path="/direct/t/:ChatID" element={<Chatpage />} />
       </Routes>
       <Analytics />
     </BrowserRouter>

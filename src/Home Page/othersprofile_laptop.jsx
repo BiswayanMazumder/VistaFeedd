@@ -267,11 +267,12 @@ const OthersProfile_Laptop = () => {
                                 </div>
                             </Link>
                         }
-                        <Link style={{ textDecoration: 'none', color: "white" }}>
+                        <Link style={{ textDecoration: 'none', color: "white" }} to={chatted?`/direct/t/${chatID}`:null}>
                             <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "grey", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }} onClick={async () => {
                                 if (auth.currentUser) {
                                     if (!chatted) {
                                         await generatechats();
+                                        
                                     }
                                 }
                             }}>
