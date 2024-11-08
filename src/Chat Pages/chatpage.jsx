@@ -3,6 +3,7 @@ import Sidebar_Profile from '../Components/Sidebar_Profile'
 import Sidebar_Messages from '../Components/Sidebar_Messages'
 import Sidebar_messages_mobile from '../Components_mobile/Sidebar_messages_mobile'
 import Chatpage_laptop from './chatpage_laptop'
+import Chatpage_mobile from './chatpage_mobile'
 
 export default function Chatpage() {
   return (
@@ -17,7 +18,7 @@ export default function Chatpage() {
                 <Chatpage_laptop />
             </div>
             <div className="jnnfe">
-                {/* <ProfilePage_Mobile /> */}
+                <Chatpage_mobile />
             </div>
         </div>
   )

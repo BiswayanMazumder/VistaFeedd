@@ -90,7 +90,7 @@ export default function Chatpage_laptop() {
     };
 
     const fetchchatdetails = async () => {
-        const uids=[]
+        const uids = []
         const docref = doc(db, 'Chat Details', ChatID);
         const docSnap = await getDoc(docref);
         if (docSnap.exists()) {
@@ -138,7 +138,7 @@ export default function Chatpage_laptop() {
         return () => unsubscribe(); // Cleanup on unmount
     }, [ChatID, chatUID]); // Dependencies include ChatID and chatUID to refetch when these change
 
-   
+
 
     return (
         <div className="jndvnfnf" style={{ overflowY: "auto", maxHeight: "100vh", display: "flex", flexDirection: "row", marginTop: "0px", marginLeft: "0px", width: "100%", gap: "0px" }}>
@@ -148,11 +148,11 @@ export default function Chatpage_laptop() {
                         <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
                             <div className="wwkdwkdm">
                                 <img src={otherchatpfp[index]} alt={name} style={{ width: "44px", height: "44px", borderRadius: "50%" }} />
-                            </div> 
+                            </div>
                         </Link>
                         <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
                             <div className="kkmf" style={{ color: 'white', fontWeight: '400' }}>
-                                {name} 
+                                {name}
                             </div>
                         </Link>
                     </div>
