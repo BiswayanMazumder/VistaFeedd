@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { arrayRemove, arrayUnion, doc, getDoc, getFirestore, setDoc } from '@firebase/firestore';
+import { arrayRemove, arrayUnion, doc, getDoc, getFirestore, serverTimestamp, setDoc, updateDoc } from '@firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
@@ -22,7 +22,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const OthersProfile_Laptop = () => {
-    const {otheruserid}=useParams();
+    const { otheruserid } = useParams();
     const [profilePicture, setProfilePicture] = useState('');
     const [name, setName] = useState('');
     const [bio, setBio] = useState('No bio set');
@@ -33,14 +33,15 @@ const OthersProfile_Laptop = () => {
     const [tabOpened, setTabOpened] = useState('POSTS');
     const [modalOpen, setModalOpen] = useState(false);
     useEffect(() => {
-       
+
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 fetchUserData(otheruserid);
                 fetchPosts(otheruserid);
                 fetchFollowers(otheruserid);
                 fetchFollowing(otheruserid);
-                fetchuserfollowers(auth.currentUser.uid)
+                fetchuserfollowers(auth.currentUser.uid);
+                checkchats();
             } else {
                 // Handle user not logged in
                 console.log("User not logged in");
@@ -53,7 +54,7 @@ const OthersProfile_Laptop = () => {
 
         return () => unsubscribe(); // Cleanup subscription on unmount
     }, []);
-    const [verified,setverified] = useState(false);
+    const [verified, setverified] = useState(false);
     const fetchUserData = async (uid) => {
         const docRef = doc(db, "User Details", uid);
         const docSnap = await getDoc(docRef);
@@ -70,13 +71,13 @@ const OthersProfile_Laptop = () => {
         const postIds = [];
         const docsnap = doc(db, "Global Post IDs", 'Posts');
         const snapshot = await getDoc(docsnap);
-        
+
         if (snapshot.exists()) {
             const ids = snapshot.data()['Post IDs'] || [];
             const images = await Promise.all(ids.map(async (postId) => {
                 const postRef = doc(db, "Global Post", postId);
                 const postSnap = await getDoc(postRef);
-                
+
                 if (postSnap.exists()) {
                     const postData = postSnap.data();
                     if (postData['Uploaded UID'] === uid) {
@@ -86,15 +87,15 @@ const OthersProfile_Laptop = () => {
                 }
                 return null; // If post doesn't exist or UID doesn't match
             }));
-            
+
             setPosts(postIds); // Set the post IDs to state
             setPostImages(images.filter(Boolean)); // Filter out null values
         }
     };
-    const [followed,setfollwed]=useState(false);
-    const fetchuserfollowers=async(uid)=>{
+    const [followed, setfollwed] = useState(false);
+    const fetchuserfollowers = async (uid) => {
         console.log("Fetching userfollowers");
-        const Followers=[];
+        const Followers = [];
         const docSnap = await getDoc(doc(db, 'Followers', otheruserid));
         if (docSnap.exists()) {
             Followers.push(...docSnap.data()['Followers ID'] || []);
@@ -107,7 +108,7 @@ const OthersProfile_Laptop = () => {
         const docSnap = await getDoc(doc(db, 'Followers', uid));
         if (docSnap.exists()) {
             setFollowers(docSnap.data()['Followers ID'] || []);
-            
+
         }
     };
 
@@ -121,7 +122,64 @@ const OthersProfile_Laptop = () => {
     useEffect(() => {
         document.title = `${name} - VistaFeedd`;
     }, [name]);
-    
+    const [number, setNumber] = useState(0);
+    const generateNumber = () => {
+        const randomNumber = Math.floor(Math.random() * 1e17); // Generate a random number with 17 digits
+        return randomNumber.toString().padStart(17, '0'); // Ensure it's exactly 17 digits
+    };
+
+    const generatechats = async () => {
+        try {
+            if (typeof auth.currentUser.uid !== 'string' || typeof otheruserid !== 'string') {
+                throw new Error('User IDs must be strings');
+            }
+
+            // Generate the number synchronously here
+            const number = generateNumber(); // Get the random number directly
+
+            const docref = doc(db, 'Chat UIDs', auth.currentUser.uid);
+            const datatoupdate = {
+                'UIDs': arrayUnion(otheruserid),
+                'IDs': arrayUnion(number)
+            };
+            await setDoc(docref, datatoupdate, { merge: true });
+
+            const docrefs = doc(db, 'Chat UIDs', otheruserid);
+            const datatoupdates = {
+                'UIDs': arrayUnion(auth.currentUser.uid),
+                'IDs': arrayUnion(number)
+            };
+            await setDoc(docrefs, datatoupdates, { merge: true });
+
+            const chatdet = doc(db, 'Chat Details', number);
+            const chatdetdata = {
+                'Chat ID': number,
+                'User 1': auth.currentUser.uid,
+                'User 2': otheruserid,
+                'Chat Initialized Date': serverTimestamp()
+            };
+            await setDoc(chatdet, chatdetdata);
+            setchatted(true);
+        } catch (error) {
+            console.error("Error generating chats:", error);
+        }
+    };
+
+    const [chatted, setchatted] = useState(false);
+    const checkchats = async () => {
+        try {
+            const docref = doc(db, 'Chat UIDs', auth.currentUser.uid);
+            const docSnap = await getDoc(docref);
+            if (docSnap.exists()) {
+                const Chatted = docSnap.data()['UIDs'].includes((otheruserid));
+                setchatted(docSnap.data()['UIDs'].includes(otheruserid));
+                // console.log('Chatted:', Chatted);
+            }
+        } catch (error) {
+            console.error("Error checking chats:", error);
+        }
+    };
+
     return (
         <div className="jdnvnmvnd" style={{ color: "white", overflow: "hidden" }}>
             <div className="krkmfkfvm">
@@ -134,51 +192,58 @@ const OthersProfile_Laptop = () => {
                     <div className="mdnvmn" style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
                         <div className="ddvbnd">{name}</div>
                         {
-                            verified?<svg aria-label="Verified" class="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img" viewBox="0 0 40 40" width="12"><title>Verified</title><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fill-rule="evenodd"></path></svg>:<></>
+                            verified ? <svg aria-label="Verified" class="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img" viewBox="0 0 40 40" width="12"><title>Verified</title><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fill-rule="evenodd"></path></svg> : <></>
                         }
                         {
-                            auth.currentUser?<Link style={{ textDecoration: 'none', color: "white" }} to={auth.currentUser.uid===otheruserid?'/account/edit':null}>
-                            <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: auth.currentUser.uid===otheruserid?"gray":followed?"gray":"#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }} onClick={async()=>{
-                                if(auth.currentUser.uid!=otheruserid){
-                                    if(!followed){
-                                    const docref=doc(db,'Following',auth.currentUser.uid);
-                                const datatoupdate={
-                                    'Following ID':arrayUnion(otheruserid)
-                                }
-                                await setDoc(docref,datatoupdate,{merge:true});
-                                const docrefs=doc(db,'Followers',otheruserid);
-                                const datatoupdates={
-                                    'Followers ID':arrayUnion(auth.currentUser.uid)
-                                }
-                                await setDoc(docrefs,datatoupdates,{merge:true});
-                                setfollwed(true);
-                                followers.length+=1;
-                                }else{
-                                    const docref=doc(db,'Following',auth.currentUser.uid);
-                                const datatoupdate={
-                                    'Following ID':arrayRemove(otheruserid)
-                                }
-                                await setDoc(docref,datatoupdate,{merge:true});
-                                const docrefs=doc(db,'Followers',otheruserid);
-                                const datatoupdates={
-                                    'Followers ID':arrayRemove(auth.currentUser.uid)
-                                }
-                                await setDoc(docrefs,datatoupdates,{merge:true});
-                                setfollwed(false);
-                                followers.length-=1;
-                                }
-                                }
-                            }}>
-                                {auth.currentUser.uid===otheruserid?"Edit Profile":followed?'Following':'Follow'}
-                            </div>
-                        </Link>:<Link style={{ textDecoration: 'none', color: "white" }} to={'/'}>
-                        <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor:"#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
-                            Login
-                        </div>
-                        </Link>
+                            auth.currentUser ? <Link style={{ textDecoration: 'none', color: "white" }} to={auth.currentUser.uid === otheruserid ? '/account/edit' : null}>
+                                <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: auth.currentUser.uid === otheruserid ? "gray" : followed ? "gray" : "#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }} onClick={async () => {
+                                    if (auth.currentUser.uid != otheruserid) {
+                                        if (!followed) {
+                                            const docref = doc(db, 'Following', auth.currentUser.uid);
+                                            const datatoupdate = {
+                                                'Following ID': arrayUnion(otheruserid)
+                                            }
+                                            await setDoc(docref, datatoupdate, { merge: true });
+                                            const docrefs = doc(db, 'Followers', otheruserid);
+                                            const datatoupdates = {
+                                                'Followers ID': arrayUnion(auth.currentUser.uid)
+                                            }
+                                            await setDoc(docrefs, datatoupdates, { merge: true });
+                                            setfollwed(true);
+                                            followers.length += 1;
+                                        } else {
+                                            const docref = doc(db, 'Following', auth.currentUser.uid);
+                                            const datatoupdate = {
+                                                'Following ID': arrayRemove(otheruserid)
+                                            }
+                                            await setDoc(docref, datatoupdate, { merge: true });
+                                            const docrefs = doc(db, 'Followers', otheruserid);
+                                            const datatoupdates = {
+                                                'Followers ID': arrayRemove(auth.currentUser.uid)
+                                            }
+                                            await setDoc(docrefs, datatoupdates, { merge: true });
+                                            setfollwed(false);
+                                            followers.length -= 1;
+                                        }
+                                    }
+                                }}>
+                                    {auth.currentUser.uid === otheruserid ? "Edit Profile" : followed ? 'Following' : 'Follow'}
+                                </div>
+                            </Link> : <Link style={{ textDecoration: 'none', color: "white" }} to={'/'}>
+                                <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
+                                    Login
+                                </div>
+                            </Link>
                         }
                         <Link style={{ textDecoration: 'none', color: "white" }}>
-                            <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "grey", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }}>
+                            <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: "grey", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }} onClick={async () => {
+                                if (auth.currentUser) {
+                                    if (!chatted) {
+                                        await generatechats();
+                                    }
+                                }
+                                // await generatechats();
+                            }}>
                                 Message
                             </div>
                         </Link>
