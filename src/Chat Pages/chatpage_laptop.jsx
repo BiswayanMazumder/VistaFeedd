@@ -43,7 +43,7 @@ export default function Chatpage_laptop() {
         if (docSnap.exists()) {
             const data = docSnap.data();
             IDs.push(...data['IDs']);
-            console.log('allchatid', IDs);
+            // console.log('allchatid', IDs);
         }
 
         setallchatid(IDs);  // Assuming this updates the state or UI with all the chat IDs
@@ -71,7 +71,7 @@ export default function Chatpage_laptop() {
         const pfps = [];
         const uids = [];
 
-        console.log('Chat UIDs:', chatuid);
+        // console.log('Chat UIDs:', chatuid);
         for (let j = 0; j < chatuid.length; j++) {
             const docref2 = doc(db, 'User Details', chatuid[j]);
             const docSnap2 = await getDoc(docref2);
@@ -98,7 +98,7 @@ export default function Chatpage_laptop() {
             const UID1 = data['User 1'];
             const UID2 = data['User 2'];
             uids.push(UID1 === auth.currentUser.uid ? UID2 : UID1);
-            console.log('UID',uids)
+            // console.log('UID',uids)
             setchatUID(UID1 === auth.currentUser.uid ? UID2 : UID1);
         } else {
             console.error('Chat details not found');
