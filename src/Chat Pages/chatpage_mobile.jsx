@@ -151,6 +151,11 @@ export default function Chatpage_mobile() {
                     </div>
                 </Link>
             </div>
+            <div className="ehgddh">
+                    <div className="eufhj">
+                    <input type="text" className='ejjejkj' />
+                    </div>
+                </div>
         </div>
     )
 }

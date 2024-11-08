@@ -159,7 +159,7 @@ export default function Chatpage_laptop() {
                 ))}
             </div>
             <div className="mdnfmd">
-                <div className="jnefjnedf">
+                <div className="jnefjnedf" style={{position:'fixed'}}>
                     <Link style={{ textDecoration: 'none', color: 'white' }} to={`/others/${chatUID}`}>
                         <div className="wwkdwkdm">
                             <img src={pfp} alt={name} style={{ width: "44px", height: "44px", borderRadius: "50%" }} />
@@ -170,6 +170,9 @@ export default function Chatpage_laptop() {
                             {name}
                         </div>
                     </Link>
+                </div>
+                <div className="jedbfcned">
+                    <input type="text" className='ehfjnfn' />
                 </div>
             </div>
         </div>

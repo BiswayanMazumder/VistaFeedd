@@ -686,6 +686,48 @@ font-size:17px;
   /* background-color: wheat; */
   margin-left: 50px;
 }
+.jedbfcned{
+  position: absolute;
+  bottom: 0;
+  width: 51.5vw;
+  height: 100px;
+  /* background-color: red; */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.ehfjnfn,.ejjejkj{
+  width: 90%;
+  border-radius: 40px;
+  background-color: black;
+  height: 50px;
+  border: 1px solid white;
+  color: white;
+  padding-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ejjejkj{
+  margin-top: 90vh;
+  width: 90%;
+}
+.eufhj{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-self:center;
+}
+.ehgddh{
+  width: 100%;
+  height: 100vh;
+  /* background-color: white; */
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+}
 /* Media Query for screen sizes max-width 1023px */
 @media screen and (max-width: 1023px) {
 .jdnvnmvnd {
