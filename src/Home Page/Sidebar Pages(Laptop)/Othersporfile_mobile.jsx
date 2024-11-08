@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { arrayRemove, arrayUnion, doc, getDoc, getFirestore, setDoc } from '@firebase/firestore';
+import { arrayRemove, arrayUnion, doc, getDoc, getFirestore, serverTimestamp, setDoc } from '@firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
@@ -121,6 +121,94 @@ export default function OtherProfile_Mobile() {
             fetchuserfollowers(auth.currentUser.uid);
         }
     }, [otheruserid]);
+    const [number, setNumber] = useState(0);
+    const generateNumber = () => {
+        const randomNumber = Math.floor(Math.random() * 1e17); // Generate a random number with 17 digits
+        return randomNumber.toString().padStart(17, '0'); // Ensure it's exactly 17 digits
+    };
+
+    const generatechats = async () => {
+        try {
+            if (typeof auth.currentUser.uid !== 'string' || typeof otheruserid !== 'string') {
+                throw new Error('User IDs must be strings');
+            }
+
+            // Generate the number synchronously here
+            const number = generateNumber(); // Get the random number directly
+
+            const docref = doc(db, 'Chat UIDs', auth.currentUser.uid);
+            const datatoupdate = {
+                'UIDs': arrayUnion(otheruserid),
+                'IDs': arrayUnion(number)
+            };
+            await setDoc(docref, datatoupdate, { merge: true });
+
+            const docrefs = doc(db, 'Chat UIDs', otheruserid);
+            const datatoupdates = {
+                'UIDs': arrayUnion(auth.currentUser.uid),
+                'IDs': arrayUnion(number)
+            };
+            await setDoc(docrefs, datatoupdates, { merge: true });
+
+            const chatdet = doc(db, 'Chat Details', number);
+            const chatdetdata = {
+                'Chat ID': number,
+                'User 1': auth.currentUser.uid,
+                'User 2': otheruserid,
+                'Chat Initialized Date': serverTimestamp()
+            };
+            await setDoc(chatdet, chatdetdata);
+            setchatted(true);
+        } catch (error) {
+            console.error("Error generating chats:", error);
+        }
+    };
+
+    const [chatted, setchatted] = useState(false);
+    const checkchats = async () => {
+        try {
+            const docref = doc(db, 'Chat UIDs', auth.currentUser.uid);
+            const docSnap = await getDoc(docref);
+            if (docSnap.exists()) {
+                const Chatted = docSnap.data()['UIDs'].includes((otheruserid));
+                setchatted(docSnap.data()['UIDs'].includes(otheruserid));
+                // console.log('Chatted:', Chatted);
+            }
+        } catch (error) {
+            console.error("Error checking chats:", error);
+        }
+    };
+    const [chatID,setChatID]=useState('');
+    const fetchchatid = async () => {
+        await checkchats();
+    
+        const chattedUID = [];
+        const chatID = [];
+        try {
+            const docref = doc(db, 'Chat UIDs', auth.currentUser.uid);
+            const docSnap = await getDoc(docref);
+    
+            if (docSnap.exists()) {
+                const data = docSnap.data();  // Extract the document data
+                chattedUID.push(...data['UIDs']);
+                chatID.push(...data['IDs']);
+                // console.log('chattedUID:', chattedUID);
+                // console.log('chatID:', chatID);
+                // Ensure that 'UIDs' is an array before calling findIndex
+                const indexchat = data['UIDs'].findIndex(uid => uid === otheruserid);
+    
+                if (indexchat !== -1) {
+                    setChatID(chatID[indexchat]);
+                    const Chatted = chatID[indexchat];
+                    // console.log('Chatted:', Chatted);
+                } else {
+                    console.log('User not found in the UIDs array');
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching chat ID:", error);
+        }
+    };
     return (
         <div className="profile-container" style={{ color: "white", overflow: "hidden", padding: "20px" }}>
             <div className="profile-header" style={{ display: "flex", flexDirection: "row", gap: "20px", marginTop: "20px", alignItems: "center" }}>
@@ -174,7 +262,13 @@ export default function OtherProfile_Mobile() {
                             </div>
                         </Link>}
                         <Link style={{ textDecoration: 'none', color: "white" }}>
-                            <div className="button" style={{ backgroundColor: "grey", borderRadius: "5px", padding: "5px 10px", textAlign: "center", fontSize: "12px" }}>
+                            <div className="button" style={{ backgroundColor: "grey", borderRadius: "5px", padding: "5px 10px", textAlign: "center", fontSize: "12px" }} onClick={async () => {
+                                if (auth.currentUser) {
+                                    if (!chatted) {
+                                        await generatechats();
+                                    }
+                                }
+                            }}>
                                 Message
                             </div>
                         </Link>
