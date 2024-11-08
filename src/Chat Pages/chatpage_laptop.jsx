@@ -70,7 +70,7 @@ export default function Chatpage_laptop() {
         const names = [];
         const pfps = [];
         const uids = [];
-
+        const verifiedd = [];
         // console.log('Chat UIDs:', chatuid);
         for (let j = 0; j < chatuid.length; j++) {
             const docref2 = doc(db, 'User Details', chatuid[j]);
@@ -80,11 +80,14 @@ export default function Chatpage_laptop() {
                 pfps.push(data2['Profile Pic']);
                 names.push(data2['Name']);
                 uids.push(data2['UserId']);
+
+                verifiedd.push(data2['Verified'] || false);
             }
         }
-
+        // console.log(verifiedd);
         // Update state in one go after fetching all necessary data
         setotherchatpfp(pfps);
+        isverified(verifiedd);
         setotherchatname(names);
         setotherchatuid(uids);
     };
@@ -104,9 +107,11 @@ export default function Chatpage_laptop() {
             console.error('Chat details not found');
         }
     };
-
+    const [verified, isverified] = useState([]);
+    const [userverified, isuserverified] = useState(false);
     // Function to fetch chat owner details
     const fetchchatownerdetails = async () => {
+        const verifiedd = [];
         if (!chatUID) return; // Wait until chatUID is set
         const docref = doc(db, 'User Details', chatUID);
         const docSnap = await getDoc(docref);
@@ -114,6 +119,8 @@ export default function Chatpage_laptop() {
             const data = docSnap.data();
             setpfp(data['Profile Pic']);
             setname(data['Name']);
+            isuserverified(data['Verified'] || false);
+
         } else {
             console.error('User details not found');
         }
@@ -151,23 +158,34 @@ export default function Chatpage_laptop() {
                             </div>
                         </Link>
                         <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
-                            <div className="kkmf" style={{ color: 'white', fontWeight: '400' }}>
+                            <div className="kkmf" style={{ color: 'white', fontWeight: '400', display: 'flex', flexDirection: "row", gap: '5px' }}>
                                 {name}
+                                <div style={{ marginTop: "2px" }}>
+                                    {
+                                        verified[index] ? <svg aria-label="Verified" class="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img" viewBox="0 0 40 40" width="12"><title>Verified</title><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fill-rule="evenodd"></path></svg> : <></>
+                                    }
+                                </div>
                             </div>
                         </Link>
                     </div>
                 ))}
             </div>
             <div className="mdnfmd">
-                <div className="jnefjnedf" style={{position:'fixed'}}>
+                <div className="jnefjnedf" style={{ position: 'fixed' }}>
                     <Link style={{ textDecoration: 'none', color: 'white' }} to={`/others/${chatUID}`}>
                         <div className="wwkdwkdm">
                             <img src={pfp} alt={name} style={{ width: "44px", height: "44px", borderRadius: "50%" }} />
                         </div>
                     </Link>
-                    <Link style={{ textDecoration: 'none', color: 'white' }} to={`/others/${chatUID}`}>
+                    <Link style={{ textDecoration: 'none', color: 'white', display: "flex", flexDirection: "row", gap: '5px' }} to={`/others/${chatUID}`}>
                         <div className="kkmf">
                             {name}
+
+                        </div>
+                        <div style={{ marginTop: "2px" }}>
+                            {
+                                userverified ? <svg aria-label="Verified" class="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img" viewBox="0 0 40 40" width="12"><title>Verified</title><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fill-rule="evenodd"></path></svg> : <></>
+                            }
                         </div>
                     </Link>
                 </div>
