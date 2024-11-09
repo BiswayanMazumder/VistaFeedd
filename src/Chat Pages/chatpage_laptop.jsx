@@ -35,30 +35,31 @@ export default function Chatpage_laptop() {
     const [allchatid, setallchatid] = useState([]);
     const [otherchatuid, setotherchatuid] = useState([]);
     const [lastMessages, setlastMessages] = useState([]);
-
+    const [lasttime, setlasttime] = useState([]);
+    const [lastseen,setlastseen] = useState([]);
     // Fetch all chat IDs
     const fetchallchatids = async () => {
         const IDs = [];
         const chatuid = [];
         const docref = doc(db, 'Chat UIDs', auth.currentUser.uid);
         const docSnap = await getDoc(docref);
-    
+
         if (docSnap.exists()) {
             const data = docSnap.data();
             IDs.push(...data['IDs']);
         }
-    
+
         setallchatid(IDs);
-    
+
         for (let i = 0; i < IDs.length; i++) {
             const docref1 = doc(db, 'Chat Details', IDs[i]);
             const docSnap1 = await getDoc(docref1);
-    
+
             if (docSnap1.exists()) {
                 const data1 = docSnap1.data();
                 const user1 = data1['User 1'];
                 const user2 = data1['User 2'];
-    
+
                 if (user1 !== auth.currentUser.uid) {
                     chatuid.push(user1);
                 }
@@ -67,13 +68,15 @@ export default function Chatpage_laptop() {
                 }
             }
         }
-    
+
         const names = [];
         const pfps = [];
         const uids = [];
         const verifiedd = [];
-        const lastMessages = [];  // Store last messages for each chat
-    
+        const lastMessages = [];
+        const lastTime = [];  // Store both message and timestamp
+        const LastSeen=[];
+
         // Fetch user details and the latest message for each chat
         for (let j = 0; j < chatuid.length; j++) {
             const docref2 = doc(db, 'User Details', chatuid[j]);
@@ -85,23 +88,30 @@ export default function Chatpage_laptop() {
                 uids.push(data2['UserId']);
                 verifiedd.push(data2['Verified'] || false);
             }
-    
+
             // Fetch the latest message for the current chat
             const messagesRef = collection(db, 'Chats', allchatid[j], 'Messages');
             const q = query(messagesRef, orderBy('timestamp', 'desc'), limit(1));  // Get only the latest message
-    
+
             const querySnapshot = await getDocs(q);
             const lastMessage = querySnapshot.docs.length > 0 ? querySnapshot.docs[0].data() : null;
-            lastMessages.push(lastMessage ? lastMessage.message : 'Tap to chat'); // If no message, show placeholder
+
+            lastMessages.push(lastMessage ? lastMessage.message : 'Tap to chat');  // If no message, show placeholder
+            lastTime.push(lastMessage ? lastMessage.timestamp : null);  // Store timestamp for each chat
+            LastSeen.push(lastMessage ? lastMessage.seen : true);
         }
-    
+
         setotherchatpfp(pfps);
         setVerified(verifiedd);
         setotherchatname(names);
         setotherchatuid(uids);
-        setlastMessages(lastMessages);  // Set the last messages
+        setlastMessages(lastMessages);
+        // console.log('Last Seen',LastSeen);
+        setlastseen(LastSeen);  // Set the last seen status for each chat
+        setlasttime(lastTime);  // Set the timestamps for each chat
     };
-    
+
+
 
     // Fetch chat details
     const fetchchatdetails = async () => {
@@ -198,7 +208,22 @@ export default function Chatpage_laptop() {
 
         return () => unsubscribe();
     }, [ChatID, chatUID]);
-
+    function formatTimeAgo(timestamp) {
+        const now = new Date();
+        const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+        const seconds = Math.floor((now - date) / 1000);
+        let interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) return interval + " y" + (interval > 1 ? "" : "");
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) return interval + " M" + (interval > 1 ? "" : "");
+        interval = Math.floor(seconds / 86400);
+        if (interval >= 1) return interval + " d" + (interval > 1 ? "" : "");
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) return interval + " h" + (interval > 1 ? "" : "");
+        interval = Math.floor(seconds / 60);
+        if (interval >= 1) return interval + " m" + (interval > 1 ? "" : "");
+        return seconds + " second" + (seconds > 1 ? "s" : "") + " ago";
+    }
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -207,36 +232,39 @@ export default function Chatpage_laptop() {
         <div className="jndvnfnf" style={{ overflowY: "auto", maxHeight: "100vh", display: "flex", flexDirection: "row", marginTop: "0px", marginLeft: "0px", width: "100%", gap: "0px" }}>
             {/* Sidebar with chat list */}
             <div className="emnfmdkvm">
-    {otherchatname.map((name, index) => (
-        <div className="ekfkmv" key={index}>
-            <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
-                <div className="wwkdwkdm">
-                    <img src={otherchatpfp[index]} alt={name} style={{ width: "44px", height: "44px", borderRadius: "50%" }} />
-                </div>
-            </Link>
-            <div style={{ display: "flex", flexDirection: "column", gap: "5px", justifyContent: "start", alignItems: "start" }}>
-                <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
-                    <div className="kkmf" style={{ color: 'white', fontWeight: '400', display: 'flex', flexDirection: "row", gap: '5px' }}>
-                        {name}
-                        <div style={{ marginTop: "2px" }}>
-                            {verified[index] ? (
-                                <svg aria-label="Verified" className="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img" viewBox="0 0 40 40" width="12">
-                                    <title>Verified</title>
-                                    <path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fillRule="evenodd"></path>
-                                </svg>
-                            ) : null}
+                {otherchatname.map((name, index) => (
+                    <div className="ekfkmv" key={index}>
+                        <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
+                            <div className="wwkdwkdm">
+                                <img src={otherchatpfp[index]} alt={name} style={{ width: "44px", height: "44px", borderRadius: "50%" }} />
+                            </div>
+                        </Link>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "5px", justifyContent: "start", alignItems: "start" }}>
+                            <Link style={{ textDecoration: 'none', color: 'white' }} to={`/direct/t/${allchatid[index]}`}>
+                                <div className="kkmf" style={{ color: 'white', fontWeight: '400', display: 'flex', flexDirection: "row", gap: '5px' }}>
+                                    {name}
+                                    <div style={{ marginTop: "2px" }}>
+                                        {verified[index] ? (
+                                            <svg aria-label="Verified" className="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img" viewBox="0 0 40 40" width="12">
+                                                <title>Verified</title>
+                                                <path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fillRule="evenodd"></path>
+                                            </svg>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            </Link>
+                            <div className="dnnd" style={{ color: 'white', fontSize: '15px', color: "grey", display: "flex", flexDirection: "row", gap: "10px" }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',color:lastseen[index]?"grey":"white",fontWeight:!lastseen[index] ? 'bold' : 'normal' }}>
+                                    <span>{lastMessages[index]}</span>
+                                    <span style={{ fontSize: '12px', color: 'gray', marginLeft: "10px" }}>
+                                        {lasttime[index] ? formatTimeAgo(lasttime[index]) : null} {/* Format and display the timestamp */}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </Link>
-                <div className="dnnd" style={{ color: 'white', fontSize: '15px', color: "grey" }}>
-                    {
-                        lastMessages[index]  // Display the last message for each user
-                    }
-                </div>
+                ))}
             </div>
-        </div>
-    ))}
-</div>
 
 
             {/* Chat Box */}
