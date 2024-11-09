@@ -249,11 +249,17 @@ export default function Chatpage_laptop() {
                             justifyContent: msg.senderId === auth.currentUser.uid ? 'flex-end' : 'flex-start',
                             padding: '10px',
                         }}>
+                        {
+                            msg.senderId === auth.currentUser.uid ?<></>:<div style={{height: '35px',width:'35px',borderRadius:'50%',backgroundColor:'white'}}>
+                            <img src={pfp} alt="" height={'35px'} width={'35px'} style={{borderRadius:'50%'}}/>
+                        </div>
+                        }
                             <div style={{
-                                backgroundColor: msg.senderId === auth.currentUser.uid ? '#0078d4' : '#e5e5e5',
-                                color: msg.senderId === auth.currentUser.uid ? '#fff' : '#000',
+                                backgroundColor: msg.senderId === auth.currentUser.uid ? '#3797F0' : '#1F2937',
+                                color: msg.senderId === auth.currentUser.uid ? '#fff' : '#fff',
                                 padding: '8px 12px',
                                 borderRadius: '15px',
+                                marginLeft:'10px',
                                 display: 'inline-block',
                             }}>
                                 {msg.message}

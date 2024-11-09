@@ -192,7 +192,7 @@ export default function Chatpage_mobile() {
             </div>
 
             {/* Chat Messages */}
-            <div className="kenfm" style={{ marginTop: '100px', height: 'calc(100vh - 370px)', overflowY: 'scroll', overflowX: 'hidden' }}>
+            <div className="kenfm">
                 {messages.map((msg, index) => (
                     <div key={index} style={{
                         display: 'flex',
