@@ -242,7 +242,7 @@ export default function Chatpage_laptop() {
                 </div>
 
                 {/* Messages Display */}
-                <div className="nbfh" style={{ marginTop: '100px', height: '100vh', overflowY: 'auto', overflowX: 'hidden' }}>
+                <div className="nbfh" style={{ marginTop: '100px', height: 'calc(100vh - 200px)', overflowY: 'scroll', overflowX: 'hidden' }}>
                     {messages.map((msg, index) => (
                         <div key={index} style={{
                             display: 'flex',
@@ -263,7 +263,7 @@ export default function Chatpage_laptop() {
                 </div>
 
                 {/* Message Input */}
-                <div className="jedbfcned">
+                <div className="jedbfcned" style={{ position: 'fixed' }}>
                     <input
                         type="text"
                         value={messageText}

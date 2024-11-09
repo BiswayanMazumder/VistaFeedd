@@ -192,7 +192,7 @@ export default function Chatpage_mobile() {
             </div>
 
             {/* Chat Messages */}
-            <div className="kenfm">
+            <div className="kenfm" style={{ marginTop: '100px', height: 'calc(100vh - 370px)', overflowY: 'scroll', overflowX: 'hidden' }}>
                 {messages.map((msg, index) => (
                     <div key={index} style={{
                         display: 'flex',
@@ -213,7 +213,7 @@ export default function Chatpage_mobile() {
             </div>
 
             {/* Message Input */}
-            <div className="ehgddh">
+            <div className="ehgddh" style={{position:"fixed"}}>
                 <div className="eufhj">
                     <input
                         type="text"

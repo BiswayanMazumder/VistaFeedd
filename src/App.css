@@ -728,6 +728,9 @@ font-size:17px;
   position: absolute;
   bottom: 0;
 }
+.nbfh::-webkit-scrollbar{
+  display: none;
+}
 /* Media Query for screen sizes max-width 1023px */
 @media screen and (max-width: 1023px) {
 .jdnvnmvnd {
