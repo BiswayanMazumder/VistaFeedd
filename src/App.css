@@ -881,6 +881,34 @@
   align-items: center;
   /* margin-bottom: 20px; */
 }
+.bvnvfmnv{
+  width: 81.5vw;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: red; */
+}
+.ebfnb{
+  width: 90%;
+  height:40px;
+  background-color: #363636;
+  border-radius: 20px;
+  border: 1px solid #363636;
+  color: white;
+  font-size: 15px;
+  padding-left: 20px;
+}
+.ejfjenfjednf{
+  display: flex;
+  width: 90%;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  margin-left: 50px;
+  margin-top: 30px;
+}
+
 /* Media Query for screen sizes max-width 1023px */
 @media screen and (max-width: 1023px) {
   .jdnvnmvnd {
