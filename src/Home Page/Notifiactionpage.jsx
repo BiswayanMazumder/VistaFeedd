@@ -9,6 +9,8 @@ import Sidebar_Explore from '../Components/sidebar_explore';
 import Sidebar_Notification from '../Components/Sidebar_Notification';
 import Sidebar_reels_mobile from '../Components_mobile/Sidebar_reels_mobile';
 import Sidebar_notification_mobile from '../Components_mobile/sidebar_notification_mobile';
+import Notification_laptop from '../Notification Pages/notification_laptop';
+import Notification_mobile from '../Notification Pages/notification_mobile';
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
     authDomain: "vistafeedd.firebaseapp.com",
@@ -52,6 +54,12 @@ export default function NotificationPage() {
         <div className="jnfvnkf" style={{ color: "white" }}>
           <Sidebar_notification_mobile />
         </div>
+        <div className="jnnf">
+                <Notification_laptop />
+            </div>
+            <div className="jnnfe">
+                <Notification_mobile />
+            </div>
         </div>
     )
 }

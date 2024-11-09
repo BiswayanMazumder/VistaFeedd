@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { arrayRemove, arrayUnion, doc, getDoc, getFirestore, serverTimestamp, setDoc, updateDoc } from '@firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, serverTimestamp, setDoc, updateDoc, where } from '@firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
@@ -128,7 +128,44 @@ const OthersProfile_Laptop = () => {
         const randomNumber = Math.floor(Math.random() * 1e17); // Generate a random number with 17 digits
         return randomNumber.toString().padStart(17, '0'); // Ensure it's exactly 17 digits
     };
-
+    const generatefollownotification = async () => {
+        const Number = generateNumber();
+        console.log('Notification generated', Number);
+    
+        // Check if a notification already exists for the same Follower ID and Follow ID
+        const notifQuery = query(
+            collection(db, 'Notifications Details'),
+            where('To Followed', '==', otheruserid),
+            where('Who Followed', '==', auth.currentUser.uid)
+        );
+    
+        const querySnapshot = await getDocs(notifQuery);
+    
+        if (!querySnapshot.empty) {
+            console.log('Notification already exists for this follow action.');
+            return;  // Exit the function if the notification already exists
+        }
+    
+        // If no existing notification, proceed to create a new one
+        const docref = doc(db, 'Notifications IDs', otheruserid);
+        const datatoupdate = {
+            'Follow IDs': arrayUnion(Number)
+        };
+        await setDoc(docref, datatoupdate, { merge: true });
+    
+        const notifrefs = doc(db, 'Notifications Details', Number);
+        const notifdata = {
+            'Notification ID': Number,
+            'To Followed': otheruserid,
+            'Who Followed': auth.currentUser.uid,
+            'Notification Type': 'Follow',
+            'Notification Date': serverTimestamp()
+        };
+    
+        await setDoc(notifrefs, notifdata);
+        console.log('New follow notification added successfully.');
+    }
+    
     const generatechats = async () => {
         try {
             if (typeof auth.currentUser.uid !== 'string' || typeof otheruserid !== 'string') {
@@ -230,6 +267,7 @@ const OthersProfile_Laptop = () => {
                         {
                             auth.currentUser ? <Link style={{ textDecoration: 'none', color: "white" }} to={auth.currentUser.uid === otheruserid ? '/account/edit' : null}>
                                 <div className="ddvbnd" style={{ height: "25px", width: "85px", borderRadius: "5px", backgroundColor: auth.currentUser.uid === otheruserid ? "gray" : followed ? "gray" : "#0095F6", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", fontSize: "12px" }} onClick={async () => {
+                                    // generatenotification();
                                     if (auth.currentUser.uid != otheruserid) {
                                         if (!followed) {
                                             const docref = doc(db, 'Following', auth.currentUser.uid);
@@ -244,6 +282,7 @@ const OthersProfile_Laptop = () => {
                                             await setDoc(docrefs, datatoupdates, { merge: true });
                                             setfollwed(true);
                                             followers.length += 1;
+                                            generatefollownotification();
                                         } else {
                                             const docref = doc(db, 'Following', auth.currentUser.uid);
                                             const datatoupdate = {
