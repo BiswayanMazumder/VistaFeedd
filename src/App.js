@@ -17,6 +17,7 @@ import OtherProfile from './Home Page/Sidebar Pages(Laptop)/OtherProfile';
 import Postviewing_laptop from './Post Pages/postviewing_laptop';
 import EditProfile from './Home Page/EditProfile';
 import Chatpage from './Chat Pages/chatpage';
+import VideoCallPage from './Chat Pages/videocall';
 function App() {
   // console.log('ENV',process.env.REACT_APP_FIREBASE_STORAGE_BUCKET);
   return (
@@ -58,6 +59,9 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/direct/t/:ChatID" element={<Chatpage />} />
+      </Routes>
+      <Routes>
+        <Route path="/video-call/:ChatID" element={<VideoCallPage />} />
       </Routes>
       <Analytics />
     </BrowserRouter>
