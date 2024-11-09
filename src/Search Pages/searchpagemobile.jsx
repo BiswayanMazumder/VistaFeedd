@@ -20,9 +20,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export default function Searchpagelaptop() {
-  // State for storing search input and search results
-  const [searchQuery, setSearchQuery] = useState('');
+export default function Searchpagemobile() {
+    const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -42,20 +41,20 @@ export default function Searchpagelaptop() {
 
     try {
       const usersRef = collection(db, 'User Details'); // Assuming your collection name is 'User Details'
-
+      
       // Searching where 'name' >= searchQuery
       const q = query(
-        usersRef,
+        usersRef, 
         where('Name', '>=', searchQuery),
         where('Name', '<=', searchQuery + '\uf8ff') // This ensures the query fetches all documents starting with searchQuery
       );
-
+      
       const querySnapshot = await getDocs(q);
       const results = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
-
+      
       setSearchResults(results); // Update the state with search results
     } catch (error) {
       console.error("Error fetching search results: ", error);
@@ -72,10 +71,8 @@ export default function Searchpagelaptop() {
       setSearchResults([]); // Clear results if query is empty
     }
   }, [searchQuery]);
-
   return (
-    <div
-      style={{
+    <div style={{
         overflowY: "auto",
         maxHeight: "100vh",
         display: "flex",
@@ -83,10 +80,10 @@ export default function Searchpagelaptop() {
         marginTop: "0px",
         marginLeft: "0px",
         width: "100%",
+        color: "white",
         gap: "0px",
-      }}
-    >
-      <div className="enfn">
+      }}>
+      <div className="ncnjndjv">
         <div className="bvnvfmnv">
           <input
             type="text"
@@ -94,7 +91,7 @@ export default function Searchpagelaptop() {
             placeholder="Search"
             value={searchQuery}
             onChange={handleSearchChange}
-
+            
           />
         </div>
         <div

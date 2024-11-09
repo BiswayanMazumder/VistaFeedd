@@ -8,8 +8,8 @@ import { getFirestore } from '@firebase/firestore';
 import Sidebar_Explore from '../Components/sidebar_explore';
 import Sidebar_Search from '../Components/sidebar_search';
 import Sidebar_search_mobile from '../Components_mobile/sidebar_search_mobile';
-import Searchpagemobile from '../Search Pages/searchpagelaptop';
 import Searchpagelaptop from '../Search Pages/searchpagelaptop';
+import Searchpagemobile from '../Search Pages/searchpagemobile';
 const firebaseConfig = {
   apiKey: "AIzaSyA5h_ElqdgLrs6lXLgwHOfH9Il5W7ARGiI",
   authDomain: "vistafeedd.firebaseapp.com",
@@ -57,7 +57,7 @@ export default function Search_Page() {
         <Searchpagelaptop />
       </div>
       <div className="jnnfe">
-        {/* <ProfilePage_Mobile /> */}
+        <Searchpagemobile />
       </div>
     </div>
   )
