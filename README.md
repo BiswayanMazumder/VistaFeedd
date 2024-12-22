@@ -1,6 +1,6 @@
 ### VistaFeedd: A Revolutionary Photo Sharing Experience
 
-In a world dominated by social media, visual content has become a critical mode of communication. Among various platforms designed for sharing photos and connecting with others, VistaFeedd stands out as a refreshing alternative, blending creativity and community engagement. This platform focuses on bringing users together through their shared love of photography, fostering a vibrant environment for both amateur and professional photographers.
+In a world dominated by social media, visual content has become a critical mode of communication. Among various platforms designed for sharing photos and connecting with others, VistaFeedd stands out as a refreshing alternative, blending creativity and community engagement. This platform focuses on bringing users together through their shared love of photography, fostering a vibrant environment for both amateur and professional photographers. 
 
 #### The Concept Behind VistaFeedd
  
